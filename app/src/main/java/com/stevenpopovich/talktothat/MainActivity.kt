@@ -43,7 +43,7 @@ class MainActivity : AppCompatActivity() {
         super.onResume()
 
         val usbManager = applicationContext.getSystemService(USB_SERVICE) as UsbManager
-        val usbDevices: HashMap<String?, UsbDevice?>? = usbManager.deviceList
+        val usbDevices = usbManager.deviceList
 
         this.findViewById<TextView>(R.id.number_of_devices).text = "Device count: ${usbDevices?.size} and devices is null: ${usbDevices == null}"
         this.findViewById<TextView>(R.id.vendor_id).text = "Keys: ${usbDevices?.keys}"
@@ -92,7 +92,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-    
+
     @SuppressLint("ClickableViewAccessibility")
     private fun setupListening(device: UsbDevice) {
         val speechRecognizer = SpeechRecognizer.createSpeechRecognizer(this)
