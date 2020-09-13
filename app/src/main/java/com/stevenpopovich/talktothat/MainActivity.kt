@@ -7,7 +7,6 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.content.res.Resources
 import android.hardware.usb.UsbDevice
 import android.hardware.usb.UsbManager
 import android.os.Bundle
@@ -22,10 +21,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.felhr.usbserial.UsbSerialDevice
-import com.felhr.usbserial.UsbSerialInterface
-import java.util.*
-import kotlin.collections.HashMap
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
     private val ACTION_USB_PERMISSION = "com.android.example.USB_PERMISSION"
@@ -35,120 +34,29 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         ActivityCompat.requestPermissions(this,
-            listOf(Manifest.permission.RECORD_AUDIO).toTypedArray(),
+            listOf(Manifest.permission.RECORD_AUDIO, ACTION_USB_PERMISSION).toTypedArray(),
             200)
     }
 
     override fun onResume() {
         super.onResume()
 
-        val usbManager = applicationContext.getSystemService(USB_SERVICE) as UsbManager
-        val usbDevices = usbManager.deviceList
+//        val usbManager = applicationContext.getSystemService(USB_SERVICE) as UsbManager
 
-        this.findViewById<TextView>(R.id.number_of_devices).text = "Device count: ${usbDevices?.size} and devices is null: ${usbDevices == null}"
-        this.findViewById<TextView>(R.id.vendor_id).text = "Keys: ${usbDevices?.keys}"
+        ContinuousSpeechRecognizer.instance.startListening(::onSpeechResults, applicationContext)
 
-        if (usbDevices?.keys?.isNotEmpty() == true) {
-            val firstKey = usbDevices.keys.first()
-            if (firstKey != null) {
-                val usbDevice = usbDevices.get(firstKey)
-
-                setupListening(usbDevice!!)
-
-                this.findViewById<TextView>(R.id.vendor_id).text = "Vendor Id: ${usbDevice?.vendorId}"
-                this.findViewById<TextView>(R.id.product_id).text = "Product Id: ${usbDevice?.productId}"
-
-                val permissionIntent = PendingIntent.getBroadcast(this, 0, Intent(ACTION_USB_PERMISSION), 0)
-                val filter = IntentFilter(ACTION_USB_PERMISSION)
-                registerReceiver(usbReceiver, filter)
-
-                usbManager.requestPermission(usbDevice, permissionIntent)
-            }
-        }
-
-        this.findViewById<Button>(R.id.light_button).setOnClickListener {
-            if (usbDevices?.keys?.isNotEmpty() == true) {
-                val firstKey = usbDevices.keys.first()
-                if (firstKey != null) {
-                    val usbDevice = usbDevices[firstKey]
-                    lightUpArdy(usbDevice!!)
-                }
-            }
-        }
     }
 
-    private val usbReceiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context, intent: Intent) {
-            if (ACTION_USB_PERMISSION == intent.action) {
-                synchronized(this) {
-                    val device: UsbDevice? = intent.getParcelableExtra(UsbManager.EXTRA_DEVICE)
+    private fun onSpeechResults(results: Bundle?) {
+        val speechResults = results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
 
-                    if (intent.getBooleanExtra(UsbManager.EXTRA_PERMISSION_GRANTED, false)) {
-                        lightUpArdy(device!!)
-                    } else {
-                        Log.d("STEV", "permission denied for device $device")
-                    }
-                }
-            }
-        }
-    }
+        speechResults.toString().verboseLog()
 
-    @SuppressLint("ClickableViewAccessibility")
-    private fun setupListening(device: UsbDevice) {
-        val speechRecognizer = SpeechRecognizer.createSpeechRecognizer(this)
-        speechRecognizer.setRecognitionListener(object : RecognitionListener {
-            override fun onReadyForSpeech(params: Bundle?) {}
-            override fun onBeginningOfSpeech() {}
-            override fun onRmsChanged(rmsdB: Float) {}
-            override fun onBufferReceived(buffer: ByteArray?) {}
-            override fun onEndOfSpeech() {}
-            override fun onError(error: Int) {}
+        findViewById<TextView>(R.id.main_text).text = speechResults.toString()
 
-            override fun onResults(results: Bundle?) {
-                val speechResults = results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
-
-                findViewById<TextView>(R.id.product_id).text = speechResults.toString()
-
-                if (speechResults?.any { it.contains("turn on the light") } == true) {
-                    lightUpArdy(device)
-                }
-            }
-
-            override fun onPartialResults(partialResults: Bundle?) {}
-            override fun onEvent(eventType: Int, params: Bundle?) {}
-        })
-
-        val speechRecognizerIntent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-
-        findViewById<Button>(R.id.listen_button).setOnTouchListener { view, event ->
-            when (event.action) {
-                MotionEvent.ACTION_UP -> {
-                    view.performClick()
-                    speechRecognizer.stopListening()
-                    findViewById<ConstraintLayout>(R.id.container).setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.white))
-                }
-                MotionEvent.ACTION_DOWN -> {
-                    speechRecognizer.startListening(speechRecognizerIntent)
-                    findViewById<ConstraintLayout>(R.id.container).setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.dark_gray))
-                }
-            }
-           true
-        }
-    }
-
-    private fun lightUpArdy(device: UsbDevice) {
-        val usbManager = applicationContext.getSystemService(USB_SERVICE) as UsbManager
-
-        val connection = usbManager.openDevice(device)
-        val serialPort = UsbSerialDevice.createUsbSerialDevice(device, connection)
-        serialPort.open()
-        serialPort.setBaudRate(9600)
-        serialPort.setDataBits(UsbSerialInterface.DATA_BITS_8)
-        serialPort.setStopBits(UsbSerialInterface.STOP_BITS_1)
-        serialPort.setParity(UsbSerialInterface.PARITY_NONE)
-        serialPort.setFlowControl(UsbSerialInterface.FLOW_CONTROL_OFF)
-        serialPort.write("on".toByteArray())
-        serialPort.close()
+//        if (speechResults?.any { it.contains("turn on the light") } == true) {
+//            ArduinoInterface.instance.writeStringToSerialPort(usbManager, "on")
+//        }
     }
 }
 
