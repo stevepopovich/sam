@@ -46,7 +46,7 @@ fun continuousSpeechRecognitionListener(businessLogic: SpeechResultBusinessLogic
             ContinuousSpeechRecognizer.instance.startListening(businessLogic, applicationContext)
         }
     }
-    
+
     override fun onResults(results: Bundle?) {
         businessLogic(results)
 

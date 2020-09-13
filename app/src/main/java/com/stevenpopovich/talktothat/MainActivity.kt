@@ -29,6 +29,10 @@ import kotlinx.coroutines.launch
 class MainActivity : AppCompatActivity() {
     private val ACTION_USB_PERMISSION = "com.android.example.USB_PERMISSION"
 
+    private val usbManager: UsbManager by lazy {
+        applicationContext.getSystemService(USB_SERVICE) as UsbManager
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -41,10 +45,7 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
-//        val usbManager = applicationContext.getSystemService(USB_SERVICE) as UsbManager
-
         ContinuousSpeechRecognizer.instance.startListening(::onSpeechResults, applicationContext)
-
     }
 
     private fun onSpeechResults(results: Bundle?) {
@@ -54,9 +55,9 @@ class MainActivity : AppCompatActivity() {
 
         findViewById<TextView>(R.id.main_text).text = speechResults.toString()
 
-//        if (speechResults?.any { it.contains("turn on the light") } == true) {
-//            ArduinoInterface.instance.writeStringToSerialPort(usbManager, "on")
-//        }
+        if (speechResults?.any { it.contains("turn on the light") } == true) {
+            ArduinoInterface.instance.writeStringToSerialPort(usbManager, "on")
+        }
     }
 }
 
