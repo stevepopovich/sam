@@ -1,7 +1,7 @@
 - repo: git://github.com/jcchavezs/pre-commit-kotlin
   rev: HEAD
   hooks:
-    - id: mvn-verify # it does not accept arguments
+    - id: mvn-verify
     - id: ktlint
       args:
         - --color

@@ -4,7 +4,7 @@ import android.hardware.usb.UsbManager
 import com.felhr.usbserial.UsbSerialDevice
 import com.felhr.usbserial.UsbSerialInterface
 
-class ArduinoInterface private constructor(): USBInterface {
+class ArduinoInterface private constructor() : USBInterface {
     override val PRODUCT_ID = 67
     override val VENDOR_ID = 9025
 
