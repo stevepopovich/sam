@@ -1,4 +1,4 @@
-name: Android Pull Request & Master CI
+name: Android Pull Request & Master Unit Test CI
 
 on:
   pull_request:

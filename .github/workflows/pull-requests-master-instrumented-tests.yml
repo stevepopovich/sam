@@ -1,3 +1,13 @@
+name: Android Pull Request & Master Unit Instrumented Test CI
+
+on:
+  pull_request:
+    branches:
+      - 'master'
+  push:
+    branches:
+      - 'master'
+
 jobs:
   test:
     runs-on: macos-latest
