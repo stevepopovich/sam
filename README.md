@@ -11,3 +11,7 @@ You will need the Arduino IDE: https://www.arduino.cc/en/main/software
 
 A physical Android device that has the cord to be connected to a physical Arduino is required
 
+Setup with:
+Github Actions for CI
+Dependabot for keeping dependencies up to date
+

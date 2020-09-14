@@ -1,10 +1,7 @@
-name: Android Pull Request & Master CI
+name: Android Pull Request & Master Unit Test CI
 
 on:
   pull_request:
-    branches:
-      - 'master'
-  push:
     branches:
       - 'master'
 
@@ -19,7 +16,8 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 1.8
-      - name: Unit tests
-        run: bash ./gradlew test --stacktrace
+
       - name: Assemble app
         run: bash ./gradlew assembleDebug
+      - name: Unit tests
+        run: bash ./gradlew test --stacktrace
