@@ -12,7 +12,7 @@ class MainActivity : AppCompatActivity() {
     private val ACTION_USB_PERMISSION = "com.android.example.USB_PERMISSION"
 
     private val usbManager: UsbManager by lazy {
-        applicationContext.getSystemService(USB_SERVICE) as UsbManager
+        applicationContext.g // etSystemService(USB_SERVICE) as UsbManager
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
