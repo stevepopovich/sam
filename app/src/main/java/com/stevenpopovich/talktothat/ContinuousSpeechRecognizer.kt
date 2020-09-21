@@ -1,6 +1,5 @@
 package com.stevenpopovich.talktothat
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.speech.RecognitionListener
@@ -10,52 +9,44 @@ import android.speech.SpeechRecognizer
 typealias SpeechResultBusinessLogic = (results: Bundle?) -> Unit
 
 class ContinuousSpeechRecognizer private constructor() {
-    private var speechRecognizer: SpeechRecognizer? = null
-
     companion object {
         val instance: ContinuousSpeechRecognizer by lazy {
             ContinuousSpeechRecognizer()
         }
-    }
 
-    fun startListening(businessLogic: SpeechResultBusinessLogic, applicationContext: Context) {
-        speechRecognizer?.destroy()
+        fun recognitionListener(businessLogic: SpeechResultBusinessLogic, speechRecognizer: SpeechRecognizer, intent: Intent) = object : RecognitionListener {
+            override fun onReadyForSpeech(params: Bundle?) {}
+            override fun onBeginningOfSpeech() {}
+            override fun onRmsChanged(rmsdB: Float) {}
+            override fun onBufferReceived(buffer: ByteArray?) {}
+            override fun onEndOfSpeech() {}
+            override fun onError(error: Int) {
+                if (error.toRecognizerError == "ERROR_NO_MATCH") {
+                    instance.startListening(speechRecognizer, this, intent)
+                }
+            }
 
-        speechRecognizer = SpeechRecognizer.createSpeechRecognizer(applicationContext)
+            override fun onResults(results: Bundle?) {
+                businessLogic(results)
 
-        speechRecognizer?.let {
-            it.setRecognitionListener(continuousSpeechRecognitionListener(businessLogic, applicationContext))
+                instance.startListening(speechRecognizer, this, intent)
+            }
 
-            val speechRecognizerIntent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
+            override fun onPartialResults(partialResults: Bundle?) {
+                businessLogic(partialResults)
+            }
 
-            speechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true)
-
-            it.startListening(speechRecognizerIntent)
-        }
-    }
-}
-
-fun continuousSpeechRecognitionListener(businessLogic: SpeechResultBusinessLogic, applicationContext: Context) = object : RecognitionListener {
-    override fun onReadyForSpeech(params: Bundle?) {}
-    override fun onBeginningOfSpeech() {}
-    override fun onRmsChanged(rmsdB: Float) {}
-    override fun onBufferReceived(buffer: ByteArray?) {}
-    override fun onEndOfSpeech() {}
-    override fun onError(error: Int) {
-        if (error.toRecognizerError == "ERROR_NO_MATCH") {
-            ContinuousSpeechRecognizer.instance.startListening(businessLogic, applicationContext)
+            override fun onEvent(eventType: Int, params: Bundle?) {}
         }
     }
 
-    override fun onResults(results: Bundle?) {
-        businessLogic(results)
+    fun startListening(speechRecognizer: SpeechRecognizer, recognitionListener: RecognitionListener, intent: Intent) {
+        speechRecognizer.destroy()
+        speechRecognizer.setRecognitionListener(recognitionListener)
 
-        ContinuousSpeechRecognizer.instance.startListening(businessLogic, applicationContext)
+        intent.action = RecognizerIntent.ACTION_RECOGNIZE_SPEECH
+        intent.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true)
+
+        speechRecognizer.startListening(intent)
     }
-
-    override fun onPartialResults(partialResults: Bundle?) {
-        businessLogic(partialResults)
-    }
-
-    override fun onEvent(eventType: Int, params: Bundle?) {}
 }

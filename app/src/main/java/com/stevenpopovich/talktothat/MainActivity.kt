@@ -1,6 +1,7 @@
 package com.stevenpopovich.talktothat
 
 import android.Manifest
+import android.content.Intent
 import android.hardware.usb.UsbManager
 import android.os.Bundle
 import android.speech.SpeechRecognizer
@@ -29,13 +30,24 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
-        ContinuousSpeechRecognizer.instance.startListening(::onSpeechResults, applicationContext)
+        val androidSpeechRecognizer = SpeechRecognizer.createSpeechRecognizer(applicationContext)
+        val intent = Intent()
+
+        val recognitionListener = ContinuousSpeechRecognizer.recognitionListener(
+            ::onSpeechResults,
+            androidSpeechRecognizer,
+            intent
+        )
+
+        ContinuousSpeechRecognizer.instance.startListening(
+            androidSpeechRecognizer,
+            recognitionListener,
+            intent
+        )
     }
 
     private fun onSpeechResults(results: Bundle?) {
         val speechResults = results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
-
-        speechResults.toString().verboseLog()
 
         findViewById<TextView>(R.id.main_text).text = speechResults.toString()
 
