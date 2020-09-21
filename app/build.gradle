@@ -26,6 +26,18 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+    testOptions {
+        unitTests {
+            returnDefaultValues = true
+        }
+    }
+
+    useLibrary 'android.test.mock'
+}
+
+repositories {
+    jcenter()
 }
 
 dependencies {
@@ -37,8 +49,11 @@ dependencies {
     implementation 'com.github.felHR85:UsbSerial:6.1.0'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9-native-mt'
     testImplementation 'junit:junit:4.13'
-    testImplementation "io.mockk:mockk:1.10.0"
+    testImplementation 'io.mockk:mockk:1.10.0'
+    testImplementation 'com.github.dpreussler:android-tdd-utils:v0.1'
+    testImplementation "org.mockito:mockito-core:3.5.11"
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     androidTestImplementation "io.mockk:mockk-android:1.10.0"
+    androidTestImplementation "org.mockito:mockito-android:3.5.11"
 }
