@@ -2,6 +2,7 @@ package com.stevenpopovich.talktothat
 
 import android.Manifest
 import android.content.Intent
+import android.hardware.usb.UsbDevice
 import android.hardware.usb.UsbManager
 import android.os.Bundle
 import android.speech.SpeechRecognizer
@@ -14,6 +15,10 @@ class MainActivity : AppCompatActivity() {
 
     private val usbManager: UsbManager by lazy {
         applicationContext.getSystemService(USB_SERVICE) as UsbManager
+    }
+
+    private val arduinoDevice: UsbDevice? by lazy {
+        ArduinoInterface.instance.getDevice(usbManager)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,8 +56,10 @@ class MainActivity : AppCompatActivity() {
 
         findViewById<TextView>(R.id.main_text).text = speechResults.toString()
 
-        if (speechResults?.any { it.contains("turn on the light") } == true) {
-            ArduinoInterface.instance.writeStringToSerialPort(usbManager, "on")
+        arduinoDevice?.let { arduino ->
+            if (speechResults?.any { it.contains("turn on the light") } == true) {
+                ArduinoInterface.instance.writeStringToSerialPort(usbManager, "on", arduino, SerialPortWriter())
+            }
         }
     }
 }
