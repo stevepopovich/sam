@@ -9,8 +9,7 @@ interface USBInterface {
 
     fun getDevice(usbManager: UsbManager): UsbDevice? {
         return usbManager.deviceList.entries.firstOrNull {
-            it.value.productId == this.PRODUCT_ID
-            it.value.vendorId == this.VENDOR_ID
+            it.value.productId == this.PRODUCT_ID && it.value.vendorId == this.VENDOR_ID
         }?.value
     }
 }

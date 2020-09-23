@@ -9,10 +9,12 @@ import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class ArduinoInterfaceTest {
+    private val arduinoInterface = ArduinoInterface()
+
     @Test
     fun testArduinoConstants() {
-        assertEquals(67, ArduinoInterface.instance.PRODUCT_ID)
-        assertEquals(9025, ArduinoInterface.instance.VENDOR_ID)
+        assertEquals(67, arduinoInterface.PRODUCT_ID)
+        assertEquals(9025, arduinoInterface.VENDOR_ID)
     }
 
     @Test
@@ -27,7 +29,7 @@ class ArduinoInterfaceTest {
         every { serialPortWriter.createConnection(usbManager, device) } returns connection
         every { serialPortWriter.createSerialPort(device, connection) } returns serialPort
 
-        ArduinoInterface.instance.writeStringToSerialPort(usbManager, arbitraryString, device, serialPortWriter)
+        arduinoInterface.writeStringToSerialPort(usbManager, arbitraryString, device, serialPortWriter)
 
         verifyExactlyOne { serialPortWriter.createConnection(usbManager, device) }
         verifyExactlyOne { serialPortWriter.createSerialPort(device, connection) }
