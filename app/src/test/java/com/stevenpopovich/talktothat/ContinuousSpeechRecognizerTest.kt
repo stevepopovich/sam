@@ -13,7 +13,8 @@ class ContinuousSpeechRecognizerTest {
     private val intent: Intent = relaxedMock()
     private val speechResultBusinessLogic: SpeechResultBusinessLogic = relaxedMock()
 
-    private val recognitionListener = ContinuousSpeechRecognizer.recognitionListener(
+    private val continuousSpeechRecognizer = ContinuousSpeechRecognizer()
+    private val recognitionListener = continuousSpeechRecognizer.recognitionListener(
         speechResultBusinessLogic,
         speechRecognizer,
         intent
@@ -21,7 +22,7 @@ class ContinuousSpeechRecognizerTest {
 
     @Test
     fun `can start listening`() {
-        ContinuousSpeechRecognizer.instance.startListening(speechRecognizer, mockRecognitionListener, intent)
+        continuousSpeechRecognizer.startListening(speechRecognizer, mockRecognitionListener, intent)
 
         verifyExactlyOne { speechRecognizer.destroy() }
         verifyExactlyOne { speechRecognizer.setRecognitionListener(mockRecognitionListener) }
@@ -34,7 +35,7 @@ class ContinuousSpeechRecognizerTest {
     fun `recognition listener restarts listener when no match error`() {
         recognitionListener.onError(7)
 
-        verifyExactlyOne { ContinuousSpeechRecognizer.instance.startListening(speechRecognizer, recognitionListener, intent) }
+        verifyExactlyOne { continuousSpeechRecognizer.startListening(speechRecognizer, recognitionListener, intent) }
     }
 
     @Test
@@ -44,7 +45,7 @@ class ContinuousSpeechRecognizerTest {
         recognitionListener.onResults(bundle)
 
         verifyExactlyOne { speechResultBusinessLogic(bundle) }
-        verifyExactlyOne { ContinuousSpeechRecognizer.instance.startListening(speechRecognizer, recognitionListener, intent) }
+        verifyExactlyOne { continuousSpeechRecognizer.startListening(speechRecognizer, recognitionListener, intent) }
     }
 
     @Test

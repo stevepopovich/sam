@@ -8,35 +8,21 @@ import android.speech.SpeechRecognizer
 
 typealias SpeechResultBusinessLogic = (results: Bundle?) -> Unit
 
-class ContinuousSpeechRecognizer private constructor() {
+class ContinuousSpeechRecognizer {
     companion object {
-        val instance: ContinuousSpeechRecognizer by lazy {
-            ContinuousSpeechRecognizer()
-        }
+        fun start(speechRecognizer: SpeechRecognizer, speechResultsBusinessLogicEngine: SpeechResultsBusinessLogicEngine) {
+            val continuousSpeechRecognizer = ContinuousSpeechRecognizer()
+            val recognitionListener = continuousSpeechRecognizer.recognitionListener(
+                speechResultsBusinessLogicEngine::onSpeechResults,
+                speechRecognizer,
+                Intent()
+            )
 
-        fun recognitionListener(businessLogic: SpeechResultBusinessLogic, speechRecognizer: SpeechRecognizer, intent: Intent) = object : RecognitionListener {
-            override fun onReadyForSpeech(params: Bundle?) {}
-            override fun onBeginningOfSpeech() {}
-            override fun onRmsChanged(rmsdB: Float) {}
-            override fun onBufferReceived(buffer: ByteArray?) {}
-            override fun onEndOfSpeech() {}
-            override fun onError(error: Int) {
-                if (error.toRecognizerError == "ERROR_NO_MATCH") {
-                    instance.startListening(speechRecognizer, this, intent)
-                }
-            }
-
-            override fun onResults(results: Bundle?) {
-                businessLogic(results)
-
-                instance.startListening(speechRecognizer, this, intent)
-            }
-
-            override fun onPartialResults(partialResults: Bundle?) {
-                businessLogic(partialResults)
-            }
-
-            override fun onEvent(eventType: Int, params: Bundle?) {}
+            continuousSpeechRecognizer.startListening(
+                speechRecognizer,
+                recognitionListener,
+                Intent()
+            )
         }
     }
 
@@ -48,5 +34,30 @@ class ContinuousSpeechRecognizer private constructor() {
         intent.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true)
 
         speechRecognizer.startListening(intent)
+    }
+
+    fun recognitionListener(businessLogic: SpeechResultBusinessLogic, speechRecognizer: SpeechRecognizer, intent: Intent) = object : RecognitionListener {
+        override fun onReadyForSpeech(params: Bundle?) {}
+        override fun onBeginningOfSpeech() {}
+        override fun onRmsChanged(rmsdB: Float) {}
+        override fun onBufferReceived(buffer: ByteArray?) {}
+        override fun onEndOfSpeech() {}
+        override fun onError(error: Int) {
+            if (error.toRecognizerError == "ERROR_NO_MATCH") {
+                startListening(speechRecognizer, this, intent)
+            }
+        }
+
+        override fun onResults(results: Bundle?) {
+            businessLogic(results)
+
+            startListening(speechRecognizer, this, intent)
+        }
+
+        override fun onPartialResults(partialResults: Bundle?) {
+            businessLogic(partialResults)
+        }
+
+        override fun onEvent(eventType: Int, params: Bundle?) {}
     }
 }
