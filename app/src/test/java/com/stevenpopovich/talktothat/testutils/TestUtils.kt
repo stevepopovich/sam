@@ -1,4 +1,4 @@
-package com.stevenpopovich.talktothat
+package com.stevenpopovich.talktothat.testutils
 
 import io.mockk.MockKVerificationScope
 import io.mockk.mockk

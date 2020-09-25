@@ -4,6 +4,8 @@ import android.hardware.usb.UsbDevice
 import android.hardware.usb.UsbDeviceConnection
 import android.hardware.usb.UsbManager
 import com.felhr.usbserial.UsbSerialDevice
+import com.stevenpopovich.talktothat.testutils.relaxedMock
+import com.stevenpopovich.talktothat.testutils.verifyExactlyOne
 import io.mockk.every
 import org.junit.Assert.assertEquals
 import org.junit.Test

@@ -5,6 +5,7 @@ import android.hardware.usb.UsbManager
 import android.os.Bundle
 import android.speech.SpeechRecognizer
 import android.widget.TextView
+import com.stevenpopovich.talktothat.testutils.relaxedMock
 import io.mockk.every
 import io.mockk.verify
 import org.junit.Test

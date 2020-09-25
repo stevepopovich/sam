@@ -9,21 +9,6 @@ typealias SpeechResultBusinessLogic = (results: Bundle?) -> Unit
 typealias SpeechRecognizerRestartLogic = (speechRecognitionListener: ContinuousSpeechRecognitionListener) -> Unit
 
 class ContinuousSpeechRecognizer {
-    companion object {
-        fun start(speechRecognizer: SpeechRecognizer, speechResultsBusinessLogicEngine: SpeechResultsBusinessLogicEngine) {
-            val continuousSpeechRecognizer = ContinuousSpeechRecognizer()
-            val recognitionListener = ContinuousSpeechRecognitionListener(
-                speechResultsBusinessLogicEngine::onSpeechResults
-            ) { continuousSpeechRecognizer.startListening(speechRecognizer, it, Intent()) }
-
-            continuousSpeechRecognizer.startListening(
-                speechRecognizer,
-                recognitionListener,
-                Intent()
-            )
-        }
-    }
-
     fun startListening(speechRecognizer: SpeechRecognizer, recognitionListener: ContinuousSpeechRecognitionListener, intent: Intent) {
         speechRecognizer.destroy()
         speechRecognizer.setRecognitionListener(recognitionListener)
