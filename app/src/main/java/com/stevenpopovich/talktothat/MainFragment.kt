@@ -4,15 +4,13 @@ import android.Manifest
 import android.hardware.usb.UsbManager
 import android.os.Bundle
 import android.speech.SpeechRecognizer
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 
-class MainFragment : Fragment() {
+class MainFragment : Fragment(R.layout.fragment_main) {
     private val ACTION_USB_PERMISSION = "com.android.example.USB_PERMISSION"
     private val arbitraryActionCode = 200
 
@@ -22,20 +20,6 @@ class MainFragment : Fragment() {
 
     private val speechRecognizer: SpeechRecognizer by lazy {
         SpeechRecognizer.createSpeechRecognizer(this.requireContext())
-    }
-
-    private var mainText: TextView? = null
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        val view = inflater.inflate(R.layout.fragment_main, container, false)
-
-        mainText = view.findViewById(R.id.main_text)
-
-        return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -51,8 +35,10 @@ class MainFragment : Fragment() {
     override fun onResume() {
         super.onResume()
 
+        val mainText: TextView = this.requireActivity().findViewById(R.id.main_text)
+
         val logicEngine = SpeechResultsBusinessLogicEngine(
-            mainText!!,
+            mainText,
             usbManager,
             ArduinoInterface(),
             SerialPortWriter()
