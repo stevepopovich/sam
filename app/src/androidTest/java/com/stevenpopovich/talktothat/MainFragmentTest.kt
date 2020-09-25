@@ -7,21 +7,20 @@ import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class MainFragmentTest {
-
     @Test
-    fun testPermissions() {
-        val thing = launchFragmentInContainer<MainFragment>()
+    fun testFragmentStartUp() {
+        val fragment = launchFragmentInContainer<MainFragment>()
 
-        thing.onFragment {
-//            verify { SpeechRecognizer.createSpeechRecognizer(this.)}
-
-//            verify(exactly = 1) {
-//                ActivityCompat.requestPermissions(
-//                    it.requireActivity(),
-//                    listOf(Manifest.permission.RECORD_AUDIO, "com.android.example.USB_PERMISSION").toTypedArray(),
-//                    200
-//                )
-//            }
+        fragment.onFragment {
+//            assertEquals(
+//                PackageManager.PERMISSION_GRANTED,
+//                it.requireContext().checkCallingPermission("com.android.example.USB_PERMISSION")
+//            )
+//
+//            assertEquals(
+//                PackageManager.PERMISSION_GRANTED,
+//                it.requireContext().checkCallingPermission("com.android.example.USB_PERMISSION")
+//            )
         }
     }
 }

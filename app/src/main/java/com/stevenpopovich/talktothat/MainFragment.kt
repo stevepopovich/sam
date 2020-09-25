@@ -1,7 +1,6 @@
 package com.stevenpopovich.talktothat
 
 import android.Manifest
-import android.content.Intent
 import android.hardware.usb.UsbManager
 import android.os.Bundle
 import android.speech.SpeechRecognizer
@@ -59,16 +58,9 @@ class MainFragment : Fragment() {
             SerialPortWriter()
         )
 
-        val continuousSpeechRecognizer = ContinuousSpeechRecognizer()
-
-        val recognitionListener = ContinuousSpeechRecognitionListener(
-            logicEngine::onSpeechResults
-        ) { continuousSpeechRecognizer.startListening(speechRecognizer, it, Intent()) }
-
-        continuousSpeechRecognizer.startListening(
-            speechRecognizer,
-            recognitionListener,
-            Intent()
+        AppEngine().start(
+            ContinuousSpeechRecognizer(speechRecognizer),
+            logicEngine,
         )
     }
 }

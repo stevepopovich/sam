@@ -1,25 +1,27 @@
-name: Android Pull Request & Master Unit Instrumented Test CI
-
-on:
-  pull_request:
-    branches:
-      - 'master'
-
-jobs:
-  test:
-    runs-on: macos-latest
-    strategy:
-      matrix:
-        api-level: [29]
-    steps:
-      - name: checkout
-        uses: actions/checkout@v2
-
-      - name: run tests
-        uses: reactivecircus/android-emulator-runner@v2
-        with:
-          api-level: ${{ matrix.api-level }}
-          target: google_apis
-          arch: x86_64
-          profile: Nexus 6
-          script: ./gradlew connectedAndroidTest
+# There are expensive and we don't have any functioning instrumented tests.
+# Please write unit tests if possible!
+#name: Android Pull Request & Master Unit Instrumented Test CI
+#
+#on:
+#  pull_request:
+#    branches:
+#      - 'master'
+#
+#jobs:
+#  test:
+#    runs-on: macos-latest
+#    strategy:
+#      matrix:
+#        api-level: [29]
+#    steps:
+#      - name: checkout
+#        uses: actions/checkout@v2
+#
+#      - name: run tests
+#        uses: reactivecircus/android-emulator-runner@v2
+#        with:
+#          api-level: ${{ matrix.api-level }}
+#          target: google_apis
+#          arch: x86_64
+#          profile: Nexus 6
+#          script: ./gradlew connectedAndroidTest

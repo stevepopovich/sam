@@ -8,8 +8,10 @@ import android.speech.SpeechRecognizer
 typealias SpeechResultBusinessLogic = (results: Bundle?) -> Unit
 typealias SpeechRecognizerRestartLogic = (speechRecognitionListener: ContinuousSpeechRecognitionListener) -> Unit
 
-class ContinuousSpeechRecognizer {
-    fun startListening(speechRecognizer: SpeechRecognizer, recognitionListener: ContinuousSpeechRecognitionListener, intent: Intent) {
+class ContinuousSpeechRecognizer(
+    private val speechRecognizer: SpeechRecognizer
+) {
+    fun startListening(intent: Intent, recognitionListener: ContinuousSpeechRecognitionListener) {
         speechRecognizer.destroy()
         speechRecognizer.setRecognitionListener(recognitionListener)
 
