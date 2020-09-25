@@ -35,4 +35,19 @@ class ArduinoInterfaceTest {
         verifyExactlyOne { serialPortWriter.createSerialPort(device, connection) }
         verifyExactlyOne { serialPortWriter.writeToSerialPort(serialPort, arbitraryString) }
     }
+
+    @Test
+    fun testGetDevice() {
+        val usbManager: UsbManager = relaxedMock()
+        val entry: MutableMap.MutableEntry<String, UsbDevice> = relaxedMock()
+
+        every { usbManager.deviceList.entries } returns mutableSetOf(entry)
+
+        every { entry.value.productId } returns ArduinoInterface().PRODUCT_ID
+        every { entry.value.vendorId } returns ArduinoInterface().VENDOR_ID
+
+        val actualDevice = arduinoInterface.getDevice(usbManager)
+
+        assertEquals(entry.value, actualDevice)
+    }
 }
