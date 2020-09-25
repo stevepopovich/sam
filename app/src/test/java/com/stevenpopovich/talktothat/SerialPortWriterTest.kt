@@ -5,6 +5,8 @@ import android.hardware.usb.UsbDeviceConnection
 import android.hardware.usb.UsbManager
 import com.felhr.usbserial.UsbSerialDevice
 import com.felhr.usbserial.UsbSerialInterface
+import com.stevenpopovich.talktothat.testutils.relaxedMock
+import com.stevenpopovich.talktothat.testutils.verifyExactlyOne
 import io.mockk.every
 import io.mockk.mockkStatic
 import io.mockk.verify

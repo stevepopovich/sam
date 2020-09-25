@@ -1,59 +1,27 @@
 package com.stevenpopovich.talktothat
 
 import android.content.Intent
-import android.os.Bundle
-import android.speech.RecognitionListener
 import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
+import com.stevenpopovich.talktothat.testutils.relaxedMock
+import com.stevenpopovich.talktothat.testutils.verifyExactlyOne
 import org.junit.Test
 
 class ContinuousSpeechRecognizerTest {
     private val speechRecognizer: SpeechRecognizer = relaxedMock()
-    private val mockRecognitionListener: RecognitionListener = relaxedMock()
+    private val recognitionListener: ContinuousSpeechRecognitionListener = relaxedMock()
     private val intent: Intent = relaxedMock()
-    private val speechResultBusinessLogic: SpeechResultBusinessLogic = relaxedMock()
 
-    private val continuousSpeechRecognizer = ContinuousSpeechRecognizer()
-    private val recognitionListener = continuousSpeechRecognizer.recognitionListener(
-        speechResultBusinessLogic,
-        speechRecognizer,
-        intent
-    )
+    private val continuousSpeechRecognizer = ContinuousSpeechRecognizer(speechRecognizer)
 
     @Test
     fun `can start listening`() {
-        continuousSpeechRecognizer.startListening(speechRecognizer, mockRecognitionListener, intent)
+        continuousSpeechRecognizer.startListening(intent, recognitionListener)
 
         verifyExactlyOne { speechRecognizer.destroy() }
-        verifyExactlyOne { speechRecognizer.setRecognitionListener(mockRecognitionListener) }
+        verifyExactlyOne { speechRecognizer.setRecognitionListener(recognitionListener) }
         verifyExactlyOne { intent.action = RecognizerIntent.ACTION_RECOGNIZE_SPEECH }
         verifyExactlyOne { intent.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true) }
         verifyExactlyOne { speechRecognizer.startListening(intent) }
-    }
-
-    @Test
-    fun `recognition listener restarts listener when no match error`() {
-        recognitionListener.onError(7)
-
-        verifyExactlyOne { continuousSpeechRecognizer.startListening(speechRecognizer, recognitionListener, intent) }
-    }
-
-    @Test
-    fun `recognition listener onResults calls business logic and restarts listener`() {
-        val bundle: Bundle? = relaxedMock()
-
-        recognitionListener.onResults(bundle)
-
-        verifyExactlyOne { speechResultBusinessLogic(bundle) }
-        verifyExactlyOne { continuousSpeechRecognizer.startListening(speechRecognizer, recognitionListener, intent) }
-    }
-
-    @Test
-    fun `recognition listener onPartialResults calls business logic`() {
-        val bundle: Bundle? = relaxedMock()
-
-        recognitionListener.onPartialResults(bundle)
-
-        verifyExactlyOne { speechResultBusinessLogic(bundle) }
     }
 }

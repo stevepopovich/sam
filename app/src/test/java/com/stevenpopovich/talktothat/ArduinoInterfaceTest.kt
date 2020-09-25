@@ -4,6 +4,8 @@ import android.hardware.usb.UsbDevice
 import android.hardware.usb.UsbDeviceConnection
 import android.hardware.usb.UsbManager
 import com.felhr.usbserial.UsbSerialDevice
+import com.stevenpopovich.talktothat.testutils.relaxedMock
+import com.stevenpopovich.talktothat.testutils.verifyExactlyOne
 import io.mockk.every
 import org.junit.Assert.assertEquals
 import org.junit.Test
@@ -34,5 +36,20 @@ class ArduinoInterfaceTest {
         verifyExactlyOne { serialPortWriter.createConnection(usbManager, device) }
         verifyExactlyOne { serialPortWriter.createSerialPort(device, connection) }
         verifyExactlyOne { serialPortWriter.writeToSerialPort(serialPort, arbitraryString) }
+    }
+
+    @Test
+    fun testGetDevice() {
+        val usbManager: UsbManager = relaxedMock()
+        val entry: MutableMap.MutableEntry<String, UsbDevice> = relaxedMock()
+
+        every { usbManager.deviceList.entries } returns mutableSetOf(entry)
+
+        every { entry.value.productId } returns ArduinoInterface().PRODUCT_ID
+        every { entry.value.vendorId } returns ArduinoInterface().VENDOR_ID
+
+        val actualDevice = arduinoInterface.getDevice(usbManager)
+
+        assertEquals(entry.value, actualDevice)
     }
 }
