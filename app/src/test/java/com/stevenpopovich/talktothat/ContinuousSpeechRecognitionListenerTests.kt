@@ -51,4 +51,15 @@ class ContinuousSpeechRecognitionListenerTests {
         verify { businessLogic(any()) wasNot Called }
         verify { restartLogic(any()) wasNot Called }
     }
+
+    @Test
+    fun `verify type aliases`() {
+        val speechRecognitionListener: ContinuousSpeechRecognitionListener = relaxedMock()
+
+        val businessLogic: SpeechResultBusinessLogic = {}
+        val restartLogic: SpeechRecognizerRestartLogic = {}
+
+        businessLogic(null)
+        restartLogic(speechRecognitionListener)
+    }
 }
