@@ -57,7 +57,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.1'
     implementation 'com.github.felHR85:UsbSerial:6.1.0'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9-native-mt'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9-native-mt-2'
     testImplementation 'junit:junit:4.13'
     testImplementation 'io.mockk:mockk:1.10.0'
     testImplementation 'com.github.dpreussler:android-tdd-utils:v0.1'
