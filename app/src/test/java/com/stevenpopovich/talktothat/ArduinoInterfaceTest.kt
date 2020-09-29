@@ -9,6 +9,7 @@ import com.stevenpopovich.talktothat.testutils.verifyExactlyOne
 import io.mockk.every
 import org.junit.Assert.assertEquals
 import org.junit.Test
+import java.util.HashMap
 
 class ArduinoInterfaceTest {
     private val arduinoInterface = ArduinoInterface()
@@ -42,14 +43,20 @@ class ArduinoInterfaceTest {
     fun testGetDevice() {
         val usbManager: UsbManager = relaxedMock()
         val entry: MutableMap.MutableEntry<String, UsbDevice> = relaxedMock()
+        val usbDevice: UsbDevice = relaxedMock()
+        val map: HashMap<String, UsbDevice> = relaxedMock()
 
-        every { usbManager.deviceList.entries } returns mutableSetOf(entry)
+        every { map.entries } returns mutableSetOf(entry)
+        every { usbManager.deviceList } returns map
 
-        every { entry.value.productId } returns ArduinoInterface().PRODUCT_ID
-        every { entry.value.vendorId } returns ArduinoInterface().VENDOR_ID
+        every { entry.key } returns "arbitrary"
+        every { entry.value } returns usbDevice
+
+        every { usbDevice.vendorId } returns ArduinoInterface().VENDOR_ID
+        every { usbDevice.productId } returns ArduinoInterface().PRODUCT_ID
 
         val actualDevice = arduinoInterface.getDevice(usbManager)
 
-        assertEquals(entry.value, actualDevice)
+        assertEquals(usbDevice, actualDevice)
     }
 }
