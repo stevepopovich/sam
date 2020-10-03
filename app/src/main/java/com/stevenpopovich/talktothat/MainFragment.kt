@@ -1,9 +1,11 @@
 package com.stevenpopovich.talktothat
 
 import android.Manifest
+import android.hardware.camera2.CameraManager
 import android.hardware.usb.UsbManager
 import android.os.Bundle
 import android.speech.SpeechRecognizer
+import android.view.SurfaceView
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -18,6 +20,10 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         this.requireContext().getSystemService(AppCompatActivity.USB_SERVICE) as UsbManager
     }
 
+    private val cameraManager: CameraManager by lazy {
+        this.requireContext().getSystemService(AppCompatActivity.CAMERA_SERVICE) as CameraManager
+    }
+
     private val speechRecognizer: SpeechRecognizer by lazy {
         SpeechRecognizer.createSpeechRecognizer(this.requireContext())
     }
@@ -27,7 +33,11 @@ class MainFragment : Fragment(R.layout.fragment_main) {
 
         ActivityCompat.requestPermissions(
             this.requireActivity(),
-            listOf(Manifest.permission.RECORD_AUDIO, ACTION_USB_PERMISSION).toTypedArray(),
+            listOf(
+                Manifest.permission.RECORD_AUDIO,
+                ACTION_USB_PERMISSION,
+                Manifest.permission.CAMERA
+            ).toTypedArray(),
             arbitraryActionCode
         )
     }
@@ -36,6 +46,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         super.onResume()
 
         val mainText: TextView = this.requireActivity().findViewById(R.id.main_text)
+        val surface: SurfaceView = this.requireActivity().findViewById(R.id.surface)
 
         val logicEngine = SpeechResultsBusinessLogicEngine(
             mainText,
@@ -43,6 +54,8 @@ class MainFragment : Fragment(R.layout.fragment_main) {
             ArduinoInterface(),
             SerialPortWriter()
         )
+
+        CameraEngine().start(cameraManager, surface, ObjectTracker())
 
         AppEngine().start(
             ContinuousSpeechRecognizer(speechRecognizer),
