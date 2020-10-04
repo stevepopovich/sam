@@ -15,8 +15,6 @@ class CameraEngine(
         camera.previewFrameRateExact = true
         camera.engine = Engine.CAMERA2
 
-        camera.addFrameProcessor {
-            objectTracker.processImage(it)
-        }
+        camera.addFrameProcessor(objectTracker)
     }
 }

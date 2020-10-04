@@ -6,8 +6,9 @@ import com.google.mlkit.vision.objects.ObjectDetector
 import com.google.mlkit.vision.objects.defaults.ObjectDetectorOptions
 import com.otaliastudios.cameraview.CameraView
 import com.otaliastudios.cameraview.frame.Frame
+import com.otaliastudios.cameraview.frame.FrameProcessor
 
-class ObjectTracker(private val cameraView: CameraView) {
+class ObjectTracker(private val cameraView: CameraView) : FrameProcessor {
     private val objectDetector: ObjectDetector
 
     init {
@@ -20,7 +21,7 @@ class ObjectTracker(private val cameraView: CameraView) {
         objectDetector = ObjectDetection.getClient(options)
     }
 
-    fun processImage(frame: Frame) {
+    override fun process(frame: Frame) {
         val image = frame.getData<ByteArray>()
         val inputImage = InputImage.fromByteArray(
             image,
