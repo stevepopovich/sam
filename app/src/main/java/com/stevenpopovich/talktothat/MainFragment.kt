@@ -5,12 +5,12 @@ import android.hardware.camera2.CameraManager
 import android.hardware.usb.UsbManager
 import android.os.Bundle
 import android.speech.SpeechRecognizer
-import android.view.SurfaceView
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
+import com.otaliastudios.cameraview.CameraView
 
 class MainFragment : Fragment(R.layout.fragment_main) {
     private val ACTION_USB_PERMISSION = "com.android.example.USB_PERMISSION"
@@ -46,20 +46,21 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         super.onResume()
 
         val mainText: TextView = this.requireActivity().findViewById(R.id.main_text)
-        val surface: SurfaceView = this.requireActivity().findViewById(R.id.surface)
+        val camera: CameraView = this.requireActivity().findViewById(R.id.camera)
 
-        val logicEngine = SpeechResultsBusinessLogicEngine(
+        camera.setLifecycleOwner(this.viewLifecycleOwner)
+
+        val speechResultsBusinessLogicEngine = SpeechResultsBusinessLogicEngine(
             mainText,
             usbManager,
             ArduinoInterface(),
             SerialPortWriter()
         )
 
-        CameraEngine().start(cameraManager, surface, ObjectTracker())
-
         AppEngine().start(
             ContinuousSpeechRecognizer(speechRecognizer),
-            logicEngine,
+            speechResultsBusinessLogicEngine,
+            CameraEngine(camera, ObjectTracker(camera))
         )
     }
 }

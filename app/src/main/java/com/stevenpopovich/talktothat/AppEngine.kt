@@ -5,7 +5,8 @@ import android.content.Intent
 class AppEngine {
     fun start(
         continuousSpeechRecognizer: ContinuousSpeechRecognizer,
-        logicEngine: SpeechResultsBusinessLogicEngine
+        logicEngine: SpeechResultsBusinessLogicEngine,
+        cameraEngine: CameraEngine
     ) {
         val recognitionListener = ContinuousSpeechRecognitionListener(
             logicEngine::onSpeechResults
@@ -15,5 +16,7 @@ class AppEngine {
             Intent(),
             recognitionListener
         )
+
+        cameraEngine.start()
     }
 }
