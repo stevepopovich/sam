@@ -1,4 +1,4 @@
-package com.stevenpopovich.talktothat
+package com.stevenpopovich.talktothat.speechrecognition
 
 val Int.toRecognizerError: String
     get() {

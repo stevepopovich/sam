@@ -1,9 +1,11 @@
-package com.stevenpopovich.talktothat
+package com.stevenpopovich.talktothat.speechrecognition
 
 import android.hardware.usb.UsbManager
 import android.os.Bundle
 import android.speech.SpeechRecognizer
 import android.widget.TextView
+import com.stevenpopovich.talktothat.usbinterfacing.ArduinoInterface
+import com.stevenpopovich.talktothat.usbinterfacing.SerialPortWriter
 
 class SpeechResultsBusinessLogicEngine(
     private val mainText: TextView,

@@ -1,4 +1,4 @@
-package com.stevenpopovich.talktothat
+package com.stevenpopovich.talktothat.speechrecognition
 
 import android.content.Intent
 import android.speech.RecognizerIntent

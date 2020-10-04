@@ -1,4 +1,4 @@
-package com.stevenpopovich.talktothat
+package com.stevenpopovich.talktothat.objecttracker
 
 import android.graphics.Canvas
 import android.graphics.Color

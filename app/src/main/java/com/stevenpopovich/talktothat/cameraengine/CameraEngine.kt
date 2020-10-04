@@ -1,8 +1,9 @@
-package com.stevenpopovich.talktothat
+package com.stevenpopovich.talktothat.cameraengine
 
 import com.otaliastudios.cameraview.CameraView
 import com.otaliastudios.cameraview.controls.Engine
 import com.otaliastudios.cameraview.controls.Facing
+import com.stevenpopovich.talktothat.objecttracker.ObjectTracker
 
 class CameraEngine(
     private val camera: CameraView,

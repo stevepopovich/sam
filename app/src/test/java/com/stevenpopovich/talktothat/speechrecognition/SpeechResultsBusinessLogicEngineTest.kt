@@ -1,4 +1,4 @@
-package com.stevenpopovich.talktothat
+package com.stevenpopovich.talktothat.speechrecognition
 
 import android.hardware.usb.UsbDevice
 import android.hardware.usb.UsbManager
@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.speech.SpeechRecognizer
 import android.widget.TextView
 import com.stevenpopovich.talktothat.testutils.relaxedMock
+import com.stevenpopovich.talktothat.usbinterfacing.ArduinoInterface
+import com.stevenpopovich.talktothat.usbinterfacing.SerialPortWriter
 import io.mockk.every
 import io.mockk.verify
 import org.junit.Test

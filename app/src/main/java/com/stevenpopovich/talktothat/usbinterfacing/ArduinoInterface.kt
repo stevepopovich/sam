@@ -1,4 +1,4 @@
-package com.stevenpopovich.talktothat
+package com.stevenpopovich.talktothat.usbinterfacing
 
 import android.hardware.usb.UsbDevice
 import android.hardware.usb.UsbManager
