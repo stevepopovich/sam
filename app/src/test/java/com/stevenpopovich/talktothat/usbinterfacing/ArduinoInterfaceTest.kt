@@ -6,7 +6,10 @@ import android.hardware.usb.UsbManager
 import com.felhr.usbserial.UsbSerialDevice
 import com.stevenpopovich.talktothat.testutils.relaxedMock
 import com.stevenpopovich.talktothat.testutils.verifyExactlyOne
+import io.mockk.confirmVerified
 import io.mockk.every
+import io.mockk.verify
+import io.mockk.verifySequence
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import java.util.HashMap
@@ -37,6 +40,8 @@ class ArduinoInterfaceTest {
         verifyExactlyOne { serialPortWriter.createConnection(usbManager, device) }
         verifyExactlyOne { serialPortWriter.createSerialPort(device, connection) }
         verifyExactlyOne { serialPortWriter.writeToSerialPort(serialPort, arbitraryString) }
+
+        confirmVerified(usbManager, device, serialPortWriter, connection, serialPort)
     }
 
     @Test
@@ -58,5 +63,26 @@ class ArduinoInterfaceTest {
         val actualDevice = arduinoInterface.getDevice(usbManager)
 
         assertEquals(usbDevice, actualDevice)
+
+        verify { usbManager.deviceList }
+
+        verifySequence {
+            entry.hashCode()
+            entry.value
+            entry.value
+            entry.value
+        }
+
+        verifySequence {
+            usbDevice.productId
+            usbDevice.vendorId
+            usbDevice.equals(actualDevice)
+        }
+
+        verify {
+            map.entries
+        }
+
+        confirmVerified(usbManager, entry, usbDevice, map)
     }
 }

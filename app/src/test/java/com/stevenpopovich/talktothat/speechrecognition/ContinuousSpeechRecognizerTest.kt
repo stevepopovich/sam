@@ -5,6 +5,7 @@ import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
 import com.stevenpopovich.talktothat.testutils.relaxedMock
 import com.stevenpopovich.talktothat.testutils.verifyExactlyOne
+import io.mockk.confirmVerified
 import org.junit.Test
 
 class ContinuousSpeechRecognizerTest {
@@ -23,5 +24,7 @@ class ContinuousSpeechRecognizerTest {
         verifyExactlyOne { intent.action = RecognizerIntent.ACTION_RECOGNIZE_SPEECH }
         verifyExactlyOne { intent.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true) }
         verifyExactlyOne { speechRecognizer.startListening(intent) }
+
+        confirmVerified(speechRecognizer, recognitionListener, intent)
     }
 }

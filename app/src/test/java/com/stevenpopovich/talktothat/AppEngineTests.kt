@@ -5,6 +5,7 @@ import com.stevenpopovich.talktothat.speechrecognition.ContinuousSpeechRecognize
 import com.stevenpopovich.talktothat.speechrecognition.SpeechResultsBusinessLogicEngine
 import com.stevenpopovich.talktothat.testutils.relaxedMock
 import com.stevenpopovich.talktothat.testutils.verifyExactlyOne
+import io.mockk.confirmVerified
 import org.junit.Test
 
 class AppEngineTests {
@@ -24,5 +25,7 @@ class AppEngineTests {
 
         verifyExactlyOne { cameraEngine.start() }
         verifyExactlyOne { continuousSpeechRecognizer.startListening(any(), any()) }
+
+        confirmVerified(continuousSpeechRecognizer, logicEngine, cameraEngine)
     }
 }

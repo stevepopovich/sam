@@ -8,13 +8,14 @@ import android.widget.TextView
 import com.stevenpopovich.talktothat.testutils.relaxedMock
 import com.stevenpopovich.talktothat.usbinterfacing.ArduinoInterface
 import com.stevenpopovich.talktothat.usbinterfacing.SerialPortWriter
+import io.mockk.confirmVerified
 import io.mockk.every
 import io.mockk.verify
 import org.junit.Test
 
 class SpeechResultsBusinessLogicEngineTest {
     private val mainText: TextView = relaxedMock()
-    private val arduinoDevice: UsbDevice? = relaxedMock()
+    private val arduinoDevice: UsbDevice = relaxedMock()
     private val usbManager: UsbManager = relaxedMock()
     private val arduinoInterface: ArduinoInterface = relaxedMock()
     private val serialPortWriter: SerialPortWriter = relaxedMock()
@@ -36,6 +37,9 @@ class SpeechResultsBusinessLogicEngineTest {
         speechResultsBusinessLogicEngine.onSpeechResults(bundle)
 
         verify { mainText.text = stringArrayList.toString() }
+        verify { arduinoInterface.getDevice(usbManager) }
         verify { arduinoInterface.writeStringToSerialPort(usbManager, "on", arduinoDevice!!, serialPortWriter) }
+
+        confirmVerified(mainText, arduinoDevice, usbManager, arduinoInterface, serialPortWriter)
     }
 }

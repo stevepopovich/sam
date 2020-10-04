@@ -6,7 +6,8 @@ import android.graphics.Paint
 import android.graphics.PixelFormat
 import android.graphics.Rect
 import com.stevenpopovich.talktothat.testutils.relaxedMock
-import io.mockk.verifyAll
+import io.mockk.confirmVerified
+import io.mockk.verifyOrder
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
@@ -21,12 +22,14 @@ class RectangleDrawableTest {
     fun `rectangle drawable will draw a gold outlined rectangle`() {
         rectangleDrawable.draw(canvas)
 
-        verifyAll {
+        verifyOrder {
             paint.style = Paint.Style.STROKE
             paint.color = Color.YELLOW
 
             canvas.drawRect(rect, paint)
         }
+
+        confirmVerified(rect, canvas, paint)
     }
 
     @Test

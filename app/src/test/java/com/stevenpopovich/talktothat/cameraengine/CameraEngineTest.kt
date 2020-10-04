@@ -5,7 +5,8 @@ import com.otaliastudios.cameraview.controls.Engine
 import com.otaliastudios.cameraview.controls.Facing
 import com.stevenpopovich.talktothat.objecttracker.ObjectTracker
 import com.stevenpopovich.talktothat.testutils.relaxedMock
-import io.mockk.verifyAll
+import io.mockk.confirmVerified
+import io.mockk.verifyOrder
 import org.junit.Test
 
 class CameraEngineTest {
@@ -18,7 +19,7 @@ class CameraEngineTest {
     fun testCameraEngineCanStart() {
         cameraEngine.start()
 
-        verifyAll {
+        verifyOrder {
             camera.facing = Facing.BACK
             camera.previewFrameRate = 30f
             camera.previewFrameRateExact = true
@@ -26,5 +27,7 @@ class CameraEngineTest {
 
             camera.addFrameProcessor(objectTracker)
         }
+
+        confirmVerified(camera, objectTracker)
     }
 }

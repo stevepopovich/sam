@@ -4,6 +4,7 @@ import android.os.Bundle
 import com.stevenpopovich.talktothat.testutils.relaxedMock
 import com.stevenpopovich.talktothat.testutils.verifyExactlyOne
 import io.mockk.Called
+import io.mockk.confirmVerified
 import io.mockk.verify
 import org.junit.Test
 
@@ -14,10 +15,12 @@ class ContinuousSpeechRecognitionListenerTests {
     private val continuousSpeechRecognitionListener = ContinuousSpeechRecognitionListener(businessLogic, restartLogic)
 
     @Test
-    fun `recognition listener restarts listener when no match error`() {
+    fun `recognition listener restarts listener when we receive a no match error`() {
         continuousSpeechRecognitionListener.onError(7)
 
         verifyExactlyOne { restartLogic(continuousSpeechRecognitionListener) }
+
+        confirmVerified(restartLogic)
     }
 
     @Test
@@ -28,6 +31,8 @@ class ContinuousSpeechRecognitionListenerTests {
 
         verifyExactlyOne { businessLogic(bundle) }
         verifyExactlyOne { restartLogic(continuousSpeechRecognitionListener) }
+
+        confirmVerified(restartLogic, businessLogic)
     }
 
     @Test
@@ -37,6 +42,8 @@ class ContinuousSpeechRecognitionListenerTests {
         continuousSpeechRecognitionListener.onPartialResults(bundle)
 
         verifyExactlyOne { businessLogic(bundle) }
+
+        confirmVerified(businessLogic)
     }
 
     @Test
