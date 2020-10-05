@@ -1,25 +1,16 @@
 package com.stevenpopovich.talktothat.objecttracker
 
 import com.google.mlkit.vision.common.InputImage
-import com.google.mlkit.vision.objects.ObjectDetection
 import com.google.mlkit.vision.objects.ObjectDetector
 import com.google.mlkit.vision.objects.defaults.ObjectDetectorOptions
 import com.otaliastudios.cameraview.CameraView
 import com.otaliastudios.cameraview.frame.Frame
 import com.otaliastudios.cameraview.frame.FrameProcessor
 
-class ObjectTracker(private val cameraView: CameraView) : FrameProcessor {
-    private val objectDetector: ObjectDetector
-
-    init {
-        val options = ObjectDetectorOptions.Builder()
-            .setDetectorMode(ObjectDetectorOptions.STREAM_MODE)
-            .enableMultipleObjects()
-            .enableClassification()
-            .build()
-
-        objectDetector = ObjectDetection.getClient(options)
-    }
+class ObjectTracker(
+    private val cameraView: CameraView,
+    private val objectDetector: ObjectDetector = ObjectDetectorBuilder.getDetector(ObjectDetectorOptions.Builder())
+) : FrameProcessor {
 
     override fun process(frame: Frame) {
         val image = frame.getData<ByteArray>()
