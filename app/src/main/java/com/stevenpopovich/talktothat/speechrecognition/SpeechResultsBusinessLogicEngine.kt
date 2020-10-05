@@ -10,8 +10,8 @@ import com.stevenpopovich.talktothat.usbinterfacing.SerialPortWriter
 class SpeechResultsBusinessLogicEngine(
     private val mainText: TextView,
     private val usbManager: UsbManager,
-    private val arduinoInterface: ArduinoInterface,
-    private val serialPortWriter: SerialPortWriter
+    private val arduinoInterface: ArduinoInterface = ArduinoInterface(),
+    private val serialPortWriter: SerialPortWriter = SerialPortWriter()
 ) {
     fun onSpeechResults(results: Bundle?) {
         val speechResults = results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)

@@ -15,8 +15,6 @@ import com.stevenpopovich.talktothat.cameraengine.CameraEngine
 import com.stevenpopovich.talktothat.objecttracker.ObjectTracker
 import com.stevenpopovich.talktothat.speechrecognition.ContinuousSpeechRecognizer
 import com.stevenpopovich.talktothat.speechrecognition.SpeechResultsBusinessLogicEngine
-import com.stevenpopovich.talktothat.usbinterfacing.ArduinoInterface
-import com.stevenpopovich.talktothat.usbinterfacing.SerialPortWriter
 
 class MainFragment : Fragment(R.layout.fragment_main) {
     private val ACTION_USB_PERMISSION = "com.android.example.USB_PERMISSION"
@@ -58,9 +56,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
 
         val speechResultsBusinessLogicEngine = SpeechResultsBusinessLogicEngine(
             mainText,
-            usbManager,
-            ArduinoInterface(),
-            SerialPortWriter()
+            usbManager
         )
 
         AppEngine().start(
