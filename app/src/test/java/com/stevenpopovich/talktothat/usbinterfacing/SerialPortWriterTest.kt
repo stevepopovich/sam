@@ -1,4 +1,4 @@
-package com.stevenpopovich.talktothat
+package com.stevenpopovich.talktothat.usbinterfacing
 
 import android.hardware.usb.UsbDevice
 import android.hardware.usb.UsbDeviceConnection
@@ -7,10 +7,11 @@ import com.felhr.usbserial.UsbSerialDevice
 import com.felhr.usbserial.UsbSerialInterface
 import com.stevenpopovich.talktothat.testutils.relaxedMock
 import com.stevenpopovich.talktothat.testutils.verifyExactlyOne
+import io.mockk.confirmVerified
 import io.mockk.every
 import io.mockk.mockkStatic
 import io.mockk.verify
-import io.mockk.verifyAll
+import io.mockk.verifySequence
 import org.junit.Assert
 import org.junit.Test
 
@@ -28,6 +29,8 @@ class SerialPortWriterTest {
 
         verify(exactly = 2) { usbManager.openDevice(device) }
         Assert.assertEquals(expectedConnection, actualConnection)
+
+        confirmVerified(usbManager, device)
     }
 
     @Test
@@ -44,6 +47,10 @@ class SerialPortWriterTest {
 
         verifyExactlyOne { UsbSerialDevice.createUsbSerialDevice(device, connection) }
         Assert.assertEquals(expectedSerialPort, actualSerialPort)
+
+        verify { expectedSerialPort.equals(actualSerialPort) }
+
+        confirmVerified(connection, device, expectedSerialPort)
     }
 
     @Test
@@ -53,7 +60,7 @@ class SerialPortWriterTest {
 
         serialPortWriter.writeToSerialPort(serialPort, arbitraryString)
 
-        verifyAll {
+        verifySequence {
             serialPort.open()
             serialPort.setBaudRate(9600)
             serialPort.setDataBits(UsbSerialInterface.DATA_BITS_8)
@@ -63,5 +70,7 @@ class SerialPortWriterTest {
             serialPort.write(arbitraryString.toByteArray())
             serialPort.close()
         }
+
+        confirmVerified(serialPort)
     }
 }

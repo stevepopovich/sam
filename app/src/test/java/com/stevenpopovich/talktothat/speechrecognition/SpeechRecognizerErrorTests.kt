@@ -1,4 +1,4 @@
-package com.stevenpopovich.talktothat
+package com.stevenpopovich.talktothat.speechrecognition
 
 import org.junit.Assert.assertEquals
 import org.junit.Test

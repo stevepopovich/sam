@@ -1,4 +1,4 @@
-package com.stevenpopovich.talktothat
+package com.stevenpopovich.talktothat.speechrecognition
 
 import android.os.Bundle
 import android.speech.RecognitionListener

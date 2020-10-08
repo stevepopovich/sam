@@ -9,6 +9,12 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
+import com.otaliastudios.cameraview.CameraView
+import com.stevenpopovich.talktothat.cameraengine.CameraEngine
+import com.stevenpopovich.talktothat.objecttracker.DetectedObjectSuccessListener
+import com.stevenpopovich.talktothat.objecttracker.ObjectTracker
+import com.stevenpopovich.talktothat.speechrecognition.ContinuousSpeechRecognizer
+import com.stevenpopovich.talktothat.speechrecognition.SpeechResultsBusinessLogicEngine
 
 class MainFragment : Fragment(R.layout.fragment_main) {
     private val ACTION_USB_PERMISSION = "com.android.example.USB_PERMISSION"
@@ -27,7 +33,11 @@ class MainFragment : Fragment(R.layout.fragment_main) {
 
         ActivityCompat.requestPermissions(
             this.requireActivity(),
-            listOf(Manifest.permission.RECORD_AUDIO, ACTION_USB_PERMISSION).toTypedArray(),
+            listOf(
+                Manifest.permission.RECORD_AUDIO,
+                ACTION_USB_PERMISSION,
+                Manifest.permission.CAMERA
+            ).toTypedArray(),
             arbitraryActionCode
         )
     }
@@ -36,17 +46,19 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         super.onResume()
 
         val mainText: TextView = this.requireActivity().findViewById(R.id.main_text)
+        val camera: CameraView = this.requireActivity().findViewById(R.id.camera)
 
-        val logicEngine = SpeechResultsBusinessLogicEngine(
+        camera.setLifecycleOwner(this.viewLifecycleOwner)
+
+        val speechResultsBusinessLogicEngine = SpeechResultsBusinessLogicEngine(
             mainText,
-            usbManager,
-            ArduinoInterface(),
-            SerialPortWriter()
+            usbManager
         )
 
         AppEngine().start(
             ContinuousSpeechRecognizer(speechRecognizer),
-            logicEngine,
+            speechResultsBusinessLogicEngine,
+            CameraEngine(camera, ObjectTracker(DetectedObjectSuccessListener(camera)))
         )
     }
 }
