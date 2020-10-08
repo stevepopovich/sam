@@ -8,7 +8,6 @@ import com.stevenpopovich.talktothat.testutils.relaxedMock
 import com.stevenpopovich.talktothat.testutils.verifyExactlyOne
 import io.mockk.confirmVerified
 import io.mockk.every
-import io.mockk.verify
 import io.mockk.verifySequence
 import org.junit.Assert.assertEquals
 import org.junit.Test
@@ -47,42 +46,35 @@ class ArduinoInterfaceTest {
     @Test
     fun testGetDevice() {
         val usbManager: UsbManager = relaxedMock()
-        val entry: MutableMap.MutableEntry<String, UsbDevice> = relaxedMock()
         val usbDevice: UsbDevice = relaxedMock()
-        val map: HashMap<String, UsbDevice> = relaxedMock()
+        val entry: MutableMap.MutableEntry<String, UsbDevice> = mutableMapOf(Pair("arb", usbDevice)).entries.first()
+        val map: HashMap<String, UsbDevice> = hashMapOf(entry.toPair())
 
-        every { map.entries } returns mutableSetOf(entry)
         every { usbManager.deviceList } returns map
 
-        every { entry.key } returns "arbitrary"
-        every { entry.value } returns usbDevice
-
-        every { usbDevice.vendorId } returns ArduinoInterface().VENDOR_ID
-        every { usbDevice.productId } returns ArduinoInterface().PRODUCT_ID
+        every { usbDevice.vendorId } returns 9025
+        every { usbDevice.productId } returns 67
 
         val actualDevice = arduinoInterface.getDevice(usbManager)
 
         assertEquals(usbDevice, actualDevice)
 
-        verify { usbManager.deviceList }
-
         verifySequence {
-            entry.hashCode()
-            entry.value
-            entry.value
-            entry.value
+            usbManager.deviceList.entries.firstOrNull {
+                it.value.productId == arduinoInterface.PRODUCT_ID && it.value.vendorId == arduinoInterface.VENDOR_ID
+            }?.value
         }
 
         verifySequence {
+            map.entries
+            entry.value
             usbDevice.productId
+            entry.value
             usbDevice.vendorId
+            entry.value
             usbDevice.equals(actualDevice)
         }
 
-        verify {
-            map.entries
-        }
-
-        confirmVerified(usbManager, entry, usbDevice, map)
+        confirmVerified(usbManager, usbDevice)
     }
 }

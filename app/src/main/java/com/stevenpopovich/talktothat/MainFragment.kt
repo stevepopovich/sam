@@ -1,7 +1,6 @@
 package com.stevenpopovich.talktothat
 
 import android.Manifest
-import android.hardware.camera2.CameraManager
 import android.hardware.usb.UsbManager
 import android.os.Bundle
 import android.speech.SpeechRecognizer
@@ -12,6 +11,7 @@ import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import com.otaliastudios.cameraview.CameraView
 import com.stevenpopovich.talktothat.cameraengine.CameraEngine
+import com.stevenpopovich.talktothat.objecttracker.DetectedObjectSuccessListener
 import com.stevenpopovich.talktothat.objecttracker.ObjectTracker
 import com.stevenpopovich.talktothat.speechrecognition.ContinuousSpeechRecognizer
 import com.stevenpopovich.talktothat.speechrecognition.SpeechResultsBusinessLogicEngine
@@ -22,10 +22,6 @@ class MainFragment : Fragment(R.layout.fragment_main) {
 
     private val usbManager: UsbManager by lazy {
         this.requireContext().getSystemService(AppCompatActivity.USB_SERVICE) as UsbManager
-    }
-
-    private val cameraManager: CameraManager by lazy {
-        this.requireContext().getSystemService(AppCompatActivity.CAMERA_SERVICE) as CameraManager
     }
 
     private val speechRecognizer: SpeechRecognizer by lazy {
@@ -62,7 +58,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         AppEngine().start(
             ContinuousSpeechRecognizer(speechRecognizer),
             speechResultsBusinessLogicEngine,
-            CameraEngine(camera, ObjectTracker(camera))
+            CameraEngine(camera, ObjectTracker(DetectedObjectSuccessListener(camera)))
         )
     }
 }

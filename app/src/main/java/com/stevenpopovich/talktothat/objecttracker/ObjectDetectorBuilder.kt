@@ -5,14 +5,13 @@ import com.google.mlkit.vision.objects.ObjectDetector
 import com.google.mlkit.vision.objects.defaults.ObjectDetectorOptions
 
 class ObjectDetectorBuilder {
-    companion object {
-        fun getDetector(builder: ObjectDetectorOptions.Builder): ObjectDetector =
-            ObjectDetection.getClient(
-                builder
-                    .setDetectorMode(ObjectDetectorOptions.STREAM_MODE)
-                    .enableMultipleObjects()
-                    .enableClassification()
-                    .build()
-            )
+    fun getDetector(builder: ObjectDetectorOptions.Builder): ObjectDetector {
+        val clientOptions = builder
+            .setDetectorMode(ObjectDetectorOptions.STREAM_MODE)
+            .enableMultipleObjects()
+            .enableClassification()
+            .build()
+
+        return ObjectDetection.getClient(clientOptions)
     }
 }

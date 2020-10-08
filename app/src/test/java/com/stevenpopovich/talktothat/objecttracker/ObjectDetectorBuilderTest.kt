@@ -7,7 +7,7 @@ import com.stevenpopovich.talktothat.testutils.relaxedMock
 import io.mockk.confirmVerified
 import io.mockk.every
 import io.mockk.mockkStatic
-import io.mockk.verifyOrder
+import io.mockk.verify
 import io.mockk.verifySequence
 import org.junit.Assert.assertEquals
 import org.junit.Test
@@ -19,12 +19,9 @@ class ObjectDetectorBuilderTest {
 
         val expectedObjectDetector: ObjectDetector = relaxedMock()
 
-        every { ObjectDetection.getClient(any()) } returns expectedObjectDetector
-
         val builder: ObjectDetectorOptions.Builder = relaxedMock()
-        val actualDetector = ObjectDetectorBuilder.getDetector(builder)
 
-        verifySequence {
+        every {
             ObjectDetection.getClient(
                 builder
                     .setDetectorMode(ObjectDetectorOptions.STREAM_MODE)
@@ -32,11 +29,21 @@ class ObjectDetectorBuilderTest {
                     .enableClassification()
                     .build()
             )
+        } returns expectedObjectDetector
+
+        val actualDetector = ObjectDetectorBuilder().getDetector(builder)
+
+        verifySequence {
+            val clientOptions = builder
+                .setDetectorMode(ObjectDetectorOptions.STREAM_MODE)
+                .enableMultipleObjects()
+                .enableClassification()
+                .build()
+            ObjectDetection.getClient(clientOptions)
         }
 
         assertEquals(expectedObjectDetector, actualDetector)
-
-        verifyOrder { expectedObjectDetector.equals(actualDetector) }
+        verify { expectedObjectDetector.equals(actualDetector) }
 
         confirmVerified(expectedObjectDetector, builder)
     }
