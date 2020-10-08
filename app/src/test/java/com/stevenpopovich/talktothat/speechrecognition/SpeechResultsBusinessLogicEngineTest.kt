@@ -42,4 +42,9 @@ class SpeechResultsBusinessLogicEngineTest {
 
         confirmVerified(mainText, arduinoDevice, usbManager, arduinoInterface, serialPortWriter)
     }
+
+    @Test
+    fun `test optional parameters`() {
+        SpeechResultsBusinessLogicEngine(mainText, usbManager)
+    }
 }
