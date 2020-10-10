@@ -7,8 +7,6 @@ int enB = 3;
 int in3 = 5;
 int in4 = 4;
 
-int speed = 0;
-
 void setup() {
   // Set all the motor control pins to outputs
   pinMode(enA, OUTPUT);
@@ -26,15 +24,13 @@ void setup() {
 }
 
 void loop() {
-  analogWrite(enA, speed);
-  analogWrite(enB, speed);
+  analogWrite(enA, 255);
+  analogWrite(enB, 255);
 
   digitalWrite(in1, HIGH);
   digitalWrite(in2, LOW);
   digitalWrite(in3, HIGH);
   digitalWrite(in4, LOW);
-
-  speed++;
   
   delay(250);
 }
