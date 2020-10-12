@@ -1,23 +1,16 @@
+const byte numChars = 64;
+char receivedChars[numChars];   // an array to store the received data
+
+boolean newData = false;
+
 void setup() {
-  Serial.begin(9600);
-  // initialize digital pin LED_BUILTIN as an output.
-  pinMode(LED_BUILTIN, OUTPUT);
+    Serial.begin(9600);
 }
 
-// the loop function runs over and over again forever
 void loop() {
-//  while (Serial.available() > 0) {
-//    digitalWrite(LED_BUILTIN, HIGH);
-//    incoming = Serial.readString();
-//    // say what you got:
-//    Serial.println(incoming);  
-//    delay(250);
-//   }
-//
-//  digitalWrite(LED_BUILTIN, LOW);
-
-  recvOneChar();
-  showNewData();
+    recvWithEndMarker();
+    delay(400);
+    showNewData();
 }
 
 void recvWithEndMarker() {
@@ -45,8 +38,7 @@ void recvWithEndMarker() {
 
 void showNewData() {
     if (newData == true) {
-        Serial.print("This just in ... ");
-        Serial.println(receivedChar);
+        Serial.println(receivedChars);
         newData = false;
     }
 }

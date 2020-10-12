@@ -27,20 +27,20 @@ class ArduinoInterfaceTest {
         val usbManager: UsbManager = relaxedMock()
         val arbitraryString = "my thing"
         val device: UsbDevice = relaxedMock()
-        val serialPortWriter: SerialPortWriter = relaxedMock()
+        val serialPortInterface: SerialPortInterface = relaxedMock()
         val connection: UsbDeviceConnection = relaxedMock()
         val serialPort: UsbSerialDevice = relaxedMock()
 
-        every { serialPortWriter.createConnection(usbManager, device) } returns connection
-        every { serialPortWriter.createSerialPort(device, connection) } returns serialPort
+        every { serialPortInterface.createConnection(usbManager, device) } returns connection
+        every { serialPortInterface.createUsbSerialDevice(device, connection) } returns serialPort
 
-        arduinoInterface.writeStringToSerialPort(usbManager, arbitraryString, device, serialPortWriter)
+        arduinoInterface.writeStringToSerialPort(usbManager, arbitraryString, device, serialPortInterface)
 
-        verifyExactlyOne { serialPortWriter.createConnection(usbManager, device) }
-        verifyExactlyOne { serialPortWriter.createSerialPort(device, connection) }
-        verifyExactlyOne { serialPortWriter.writeToSerialPort(serialPort, arbitraryString) }
+        verifyExactlyOne { serialPortInterface.createConnection(usbManager, device) }
+        verifyExactlyOne { serialPortInterface.createUsbSerialDevice(device, connection) }
+        verifyExactlyOne { serialPortInterface.writeToSerialPort(serialPort, arbitraryString) }
 
-        confirmVerified(usbManager, device, serialPortWriter, connection, serialPort)
+        confirmVerified(usbManager, device, serialPortInterface, connection, serialPort)
     }
 
     @Test

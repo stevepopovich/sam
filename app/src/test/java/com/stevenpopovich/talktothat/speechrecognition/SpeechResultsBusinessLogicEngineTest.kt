@@ -7,7 +7,7 @@ import android.speech.SpeechRecognizer
 import android.widget.TextView
 import com.stevenpopovich.talktothat.testutils.relaxedMock
 import com.stevenpopovich.talktothat.usbinterfacing.ArduinoInterface
-import com.stevenpopovich.talktothat.usbinterfacing.SerialPortWriter
+import com.stevenpopovich.talktothat.usbinterfacing.SerialPortInterface
 import io.mockk.confirmVerified
 import io.mockk.every
 import io.mockk.verify
@@ -18,13 +18,13 @@ class SpeechResultsBusinessLogicEngineTest {
     private val arduinoDevice: UsbDevice = relaxedMock()
     private val usbManager: UsbManager = relaxedMock()
     private val arduinoInterface: ArduinoInterface = relaxedMock()
-    private val serialPortWriter: SerialPortWriter = relaxedMock()
+    private val serialPortInterface: SerialPortInterface = relaxedMock()
 
     private val speechResultsBusinessLogicEngine = SpeechResultsBusinessLogicEngine(
         mainText,
         usbManager,
         arduinoInterface,
-        serialPortWriter
+        serialPortInterface
     )
 
     @Test
@@ -38,9 +38,9 @@ class SpeechResultsBusinessLogicEngineTest {
 
         verify { mainText.text = stringArrayList.toString() }
         verify { arduinoInterface.getDevice(usbManager) }
-        verify { arduinoInterface.writeStringToSerialPort(usbManager, "on", arduinoDevice!!, serialPortWriter) }
+        verify { arduinoInterface.writeStringToSerialPort(usbManager, "on", arduinoDevice!!, serialPortInterface) }
 
-        confirmVerified(mainText, arduinoDevice, usbManager, arduinoInterface, serialPortWriter)
+        confirmVerified(mainText, arduinoDevice, usbManager, arduinoInterface, serialPortInterface)
     }
 
     @Test

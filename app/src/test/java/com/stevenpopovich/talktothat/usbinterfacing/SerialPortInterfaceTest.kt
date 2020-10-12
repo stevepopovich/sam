@@ -15,8 +15,8 @@ import io.mockk.verifySequence
 import org.junit.Assert
 import org.junit.Test
 
-class SerialPortWriterTest {
-    private val serialPortWriter = SerialPortWriter()
+class SerialPortInterfaceTest {
+    private val serialPortWriter = SerialPortInterface()
 
     @Test
     fun testCreateConnection() {
@@ -43,7 +43,7 @@ class SerialPortWriterTest {
 
         every { UsbSerialDevice.createUsbSerialDevice(device, connection) } returns expectedSerialPort
 
-        val actualSerialPort = serialPortWriter.createSerialPort(device, connection)
+        val actualSerialPort = serialPortWriter.createUsbSerialDevice(device, connection)
 
         verifyExactlyOne { UsbSerialDevice.createUsbSerialDevice(device, connection) }
         Assert.assertEquals(expectedSerialPort, actualSerialPort)
