@@ -62,6 +62,7 @@ dependencies {
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9-native-mt-2'
     implementation 'com.google.mlkit:object-detection:16.2.1'
     implementation 'com.otaliastudios:cameraview:2.6.4'
+    implementation "io.reactivex.rxjava3:rxkotlin:3.0.1"
     testImplementation 'junit:junit:4.13.1'
     testImplementation 'io.mockk:mockk:1.10.2'
     testImplementation 'com.github.dpreussler:android-tdd-utils:v0.1'

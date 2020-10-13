@@ -47,12 +47,15 @@ class MainFragment : Fragment(R.layout.fragment_main) {
 
         val mainText: TextView = this.requireActivity().findViewById(R.id.main_text)
         val camera: CameraView = this.requireActivity().findViewById(R.id.camera)
+        val debugText: TextView = this.requireActivity().findViewById(R.id.debug_text)
 
         camera.setLifecycleOwner(this.viewLifecycleOwner)
 
         val speechResultsBusinessLogicEngine = SpeechResultsBusinessLogicEngine(
             mainText,
-            usbManager
+            usbManager,
+            debugText,
+            this
         )
 
         AppEngine().start(

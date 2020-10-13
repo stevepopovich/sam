@@ -1,14 +1,10 @@
 package com.stevenpopovich.talktothat.usbinterfacing
 
 import android.hardware.usb.UsbDevice
-import android.hardware.usb.UsbDeviceConnection
 import android.hardware.usb.UsbManager
-import com.felhr.usbserial.UsbSerialDevice
 import com.stevenpopovich.talktothat.testutils.relaxedMock
-import com.stevenpopovich.talktothat.testutils.verifyExactlyOne
-import io.mockk.confirmVerified
 import io.mockk.every
-import io.mockk.verifySequence
+import io.mockk.verify
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import java.util.HashMap
@@ -23,58 +19,27 @@ class ArduinoInterfaceTest {
     }
 
     @Test
-    fun testWriteStringToSerialPort() {
-        val usbManager: UsbManager = relaxedMock()
-        val arbitraryString = "my thing"
-        val device: UsbDevice = relaxedMock()
-        val serialPortWriter: SerialPortWriter = relaxedMock()
-        val connection: UsbDeviceConnection = relaxedMock()
-        val serialPort: UsbSerialDevice = relaxedMock()
-
-        every { serialPortWriter.createConnection(usbManager, device) } returns connection
-        every { serialPortWriter.createSerialPort(device, connection) } returns serialPort
-
-        arduinoInterface.writeStringToSerialPort(usbManager, arbitraryString, device, serialPortWriter)
-
-        verifyExactlyOne { serialPortWriter.createConnection(usbManager, device) }
-        verifyExactlyOne { serialPortWriter.createSerialPort(device, connection) }
-        verifyExactlyOne { serialPortWriter.writeToSerialPort(serialPort, arbitraryString) }
-
-        confirmVerified(usbManager, device, serialPortWriter, connection, serialPort)
-    }
-
-    @Test
-    fun testGetDevice() {
+    fun `test we can get a device`() {
         val usbManager: UsbManager = relaxedMock()
         val usbDevice: UsbDevice = relaxedMock()
         val entry: MutableMap.MutableEntry<String, UsbDevice> = mutableMapOf(Pair("arb", usbDevice)).entries.first()
         val map: HashMap<String, UsbDevice> = hashMapOf(entry.toPair())
 
-        every { usbManager.deviceList } returns map
-
         every { usbDevice.vendorId } returns 9025
         every { usbDevice.productId } returns 67
 
-        val actualDevice = arduinoInterface.getDevice(usbManager)
+        every { usbManager.deviceList } returns map
 
-        assertEquals(usbDevice, actualDevice)
+        arduinoInterface.getDevice(usbManager)
+    }
 
-        verifySequence {
-            usbManager.deviceList.entries.firstOrNull {
-                it.value.productId == arduinoInterface.PRODUCT_ID && it.value.vendorId == arduinoInterface.VENDOR_ID
-            }?.value
-        }
+    @Test
+    fun `test write to serial port`() {
+        val serialPortInterface: SerialPortInterface = relaxedMock()
+        val stringToWrite = "thingy"
 
-        verifySequence {
-            map.entries
-            entry.value
-            usbDevice.productId
-            entry.value
-            usbDevice.vendorId
-            entry.value
-            usbDevice.equals(actualDevice)
-        }
+        arduinoInterface.writeStringToSerialPort(serialPortInterface, stringToWrite)
 
-        confirmVerified(usbManager, usbDevice)
+        verify { serialPortInterface.writeToSerialPort(stringToWrite + "\n") }
     }
 }
