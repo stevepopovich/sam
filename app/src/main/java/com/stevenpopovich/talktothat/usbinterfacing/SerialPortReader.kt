@@ -10,31 +10,23 @@ import java.util.concurrent.TimeUnit
 
 class SerialPortReader(
     private val debugTextView: TextView,
-    private val mainFragment: MainFragment
+    private val mainFragment: MainFragment,
+    private val behaviorSubject: BehaviorSubject<ByteArray> = BehaviorSubject.create(),
+    private val onReadFromSerialPortLogic: OnReadFromSerialPortLogic = OnReadFromSerialPortLogic(
+        debugTextView,
+        mainFragment
+    ),
+    compositeDisposable: CompositeDisposable = CompositeDisposable(),
 ) : UsbSerialInterface.UsbReadCallback {
-    private val compositeDisposable = CompositeDisposable()
-
-    private val publishSubject: BehaviorSubject<ByteArray> = BehaviorSubject.create()
-
-    private var currentBytesToPrint: ByteArray = ByteArray(0)
-
     init {
-        publishSubject
-            .doOnNext { currentBytesToPrint += it }
+        behaviorSubject
+            .doOnNext { onReadFromSerialPortLogic.bufferBytesToPrint(it) }
             .debounce(300, TimeUnit.MILLISECONDS)
-            .subscribe { _ ->
-                val stringToOutput = currentBytesToPrint.toString(Charsets.UTF_8)
-                if (stringToOutput.isNotBlank()) {
-                    mainFragment.activity?.runOnUiThread {
-                        debugTextView.text = stringToOutput
-                    }
-                }
-                currentBytesToPrint = ByteArray(0)
-            }
+            .subscribe { onReadFromSerialPortLogic.logic() }
             .addTo(compositeDisposable)
     }
 
     override fun onReceivedData(data: ByteArray?) {
-        publishSubject.onNext(data)
+        behaviorSubject.onNext(data)
     }
 }
