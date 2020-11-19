@@ -24,13 +24,25 @@ class SpeechResultsBusinessLogicEngine(
         )
 ) {
     fun onSpeechResults(results: Bundle?) {
-        serialPortInterface?.let {
+        serialPortInterface?.let { serialPort ->
             val speechResults = results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
 
             mainText.text = speechResults.toString()
 
-            if (speechResults?.any { it.contains("turn on the light") } == true) {
-                arduinoInterface.writeStringToSerialPort(it, "on")
+            if (speechResults?.any { it.contains("forward") } == true) {
+                arduinoInterface.writeStringToSerialPort(serialPort, "forward")
+            }
+            if (speechResults?.any { it.contains("backward") } == true) {
+                arduinoInterface.writeStringToSerialPort(serialPort, "backward")
+            }
+            if (speechResults?.any { it.contains("stop") } == true) {
+                arduinoInterface.writeStringToSerialPort(serialPort, "stop")
+            }
+            if (speechResults?.any { it.contains("left") } == true) {
+                arduinoInterface.writeStringToSerialPort(serialPort, "left")
+            }
+            if (speechResults?.any { it.contains("right") } == true) {
+                arduinoInterface.writeStringToSerialPort(serialPort, "right")
             }
         }
     }
