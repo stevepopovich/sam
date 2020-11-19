@@ -22,17 +22,13 @@ void setup() {
     pinMode(in3, OUTPUT);
     pinMode(in4, OUTPUT);
     
-    // Turn off motors - Initial state
-    digitalWrite(in1, LOW);
-    digitalWrite(in2, LOW);
-    digitalWrite(in3, LOW);
-    digitalWrite(in4, LOW);
+    stopMoving();
 }
 
 void loop() {
     recvWithEndMarker();
-    delay(1000);
-    showNewData();
+    processData();
+    delay(250);
 }
 
 void recvWithEndMarker() {
@@ -58,20 +54,69 @@ void recvWithEndMarker() {
     }
 }
 
-void showNewData() {
+void processData() {
     if (newData == true) {
-        Serial.println(receivedChars);
-        Serial.println(strcmp(receivedChars, "on"));
-
-        if (strcmp(receivedChars, "on") == 0) {
-            analogWrite(enA, 255);
-            analogWrite(enB, 255);
-          
-            digitalWrite(in1, LOW);
-            digitalWrite(in2, HIGH);
-            digitalWrite(in3, LOW);
-            digitalWrite(in4, HIGH);
+        if (strcmp(receivedChars, "forward") == 0) {
+          goForward();
         }
+        if (strcmp(receivedChars, "backward") == 0) {
+          goBackward();
+        }
+        if (strcmp(receivedChars, "left") == 0) {
+          spinCounterClockwise();
+        }
+        if (strcmp(receivedChars, "right") == 0) {
+          spinClockwise();
+        }
+        if (strcmp(receivedChars, "stop") == 0) {
+          stopMoving();
+        }
+        
         newData = false;
     }
+}
+
+void spinCounterClockwise() {
+  analogWrite(enA, 255);
+  analogWrite(enB, 255);
+  
+  digitalWrite(in1, LOW);
+  digitalWrite(in2, HIGH);
+  digitalWrite(in3, LOW);
+  digitalWrite(in4, HIGH);
+}
+
+void spinClockwise() {
+  analogWrite(enA, 255);
+  analogWrite(enB, 255);
+  
+  digitalWrite(in1, HIGH);
+  digitalWrite(in2, LOW);
+  digitalWrite(in3, HIGH);
+  digitalWrite(in4, LOW);
+}
+
+void goForward() {
+  analogWrite(enA, 255);
+  analogWrite(enB, 255);
+  
+  digitalWrite(in1, LOW);
+  digitalWrite(in2, HIGH);
+  digitalWrite(in3, HIGH);
+  digitalWrite(in4, LOW);
+}
+
+void goBackward() {
+  analogWrite(enA, 255);
+  analogWrite(enB, 255);
+  
+  digitalWrite(in1, HIGH);
+  digitalWrite(in2, LOW);
+  digitalWrite(in3, LOW);
+  digitalWrite(in4, HIGH);
+}
+
+void stopMoving() {
+  analogWrite(enA, 0);
+  analogWrite(enB, 0);
 }
