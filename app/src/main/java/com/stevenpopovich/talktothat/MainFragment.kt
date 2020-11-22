@@ -9,10 +9,6 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
-import com.otaliastudios.cameraview.CameraView
-import com.stevenpopovich.talktothat.cameraengine.CameraEngine
-import com.stevenpopovich.talktothat.objecttracker.DetectedObjectSuccessListener
-import com.stevenpopovich.talktothat.objecttracker.ObjectTracker
 import com.stevenpopovich.talktothat.speechrecognition.ContinuousSpeechRecognizer
 import com.stevenpopovich.talktothat.speechrecognition.SpeechResultsBusinessLogicEngine
 
@@ -46,10 +42,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         super.onResume()
 
         val mainText: TextView = this.requireActivity().findViewById(R.id.main_text)
-        val camera: CameraView = this.requireActivity().findViewById(R.id.camera)
         val debugText: TextView = this.requireActivity().findViewById(R.id.debug_text)
-
-        camera.setLifecycleOwner(this.viewLifecycleOwner)
 
         val speechResultsBusinessLogicEngine = SpeechResultsBusinessLogicEngine(
             mainText,
@@ -60,8 +53,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
 
         AppEngine().start(
             ContinuousSpeechRecognizer(speechRecognizer),
-            speechResultsBusinessLogicEngine,
-            CameraEngine(camera, ObjectTracker(DetectedObjectSuccessListener(camera)))
+            speechResultsBusinessLogicEngine
         )
     }
 }

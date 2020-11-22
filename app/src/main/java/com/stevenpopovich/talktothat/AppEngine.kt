@@ -1,7 +1,6 @@
 package com.stevenpopovich.talktothat
 
 import android.content.Intent
-import com.stevenpopovich.talktothat.cameraengine.CameraEngine
 import com.stevenpopovich.talktothat.speechrecognition.ContinuousSpeechRecognitionListener
 import com.stevenpopovich.talktothat.speechrecognition.ContinuousSpeechRecognizer
 import com.stevenpopovich.talktothat.speechrecognition.SpeechResultsBusinessLogicEngine
@@ -9,8 +8,7 @@ import com.stevenpopovich.talktothat.speechrecognition.SpeechResultsBusinessLogi
 class AppEngine {
     fun start(
         continuousSpeechRecognizer: ContinuousSpeechRecognizer,
-        logicEngine: SpeechResultsBusinessLogicEngine,
-        cameraEngine: CameraEngine
+        logicEngine: SpeechResultsBusinessLogicEngine
     ) {
         val recognitionListener = ContinuousSpeechRecognitionListener(
             logicEngine::onSpeechResults
@@ -20,7 +18,5 @@ class AppEngine {
             Intent(),
             recognitionListener
         )
-
-        cameraEngine.start()
     }
 }
