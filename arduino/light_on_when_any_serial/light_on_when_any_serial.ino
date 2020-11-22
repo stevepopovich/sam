@@ -1,10 +1,13 @@
-int enA = 9;
-int in1 = 8;
-int in2 = 7;
+const int enA = 9;
+const int in1 = 8;
+const int in2 = 7;
 
-int enB = 3;
-int in3 = 5;
-int in4 = 4;
+const int enB = 3;
+const int in3 = 5;
+const int in4 = 4;
+
+const int trigPin = 9;
+const int echoPin = 10;
 
 const byte numChars = 64;
 char receivedChars[numChars];
@@ -21,6 +24,9 @@ void setup() {
     pinMode(in2, OUTPUT);
     pinMode(in3, OUTPUT);
     pinMode(in4, OUTPUT);
+
+    pinMode(trigPin, OUTPUT);
+    pinMode(echoPin, INPUT);
     
     stopMoving();
 }
