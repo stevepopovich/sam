@@ -8,14 +8,14 @@ import com.stevenpopovich.talktothat.speechrecognition.SpeechResultsBusinessLogi
 class AppEngine {
     fun start(
         continuousSpeechRecognizer: ContinuousSpeechRecognizer,
-        logicEngine: SpeechResultsBusinessLogicEngine
-    ) {
-        val recognitionListener = ContinuousSpeechRecognitionListener(
+        logicEngine: SpeechResultsBusinessLogicEngine,
+        intent: Intent = Intent(),
+        recognitionListener: ContinuousSpeechRecognitionListener = ContinuousSpeechRecognitionListener(
             logicEngine::onSpeechResults
-        ) { continuousSpeechRecognizer.startListening(Intent(), it) }
-
+        ) { continuousSpeechRecognizer.startListening(intent, it) }
+    ) {
         continuousSpeechRecognizer.startListening(
-            Intent(),
+            intent,
             recognitionListener
         )
     }

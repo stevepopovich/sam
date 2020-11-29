@@ -12,8 +12,9 @@ import androidx.fragment.app.Fragment
 import com.stevenpopovich.talktothat.speechrecognition.ContinuousSpeechRecognizer
 import com.stevenpopovich.talktothat.speechrecognition.SpeechResultsBusinessLogicEngine
 
+private const val ACTION_USB_PERMISSION = "com.android.example.USB_PERMISSION"
+
 class MainFragment : Fragment(R.layout.fragment_main) {
-    private val ACTION_USB_PERMISSION = "com.android.example.USB_PERMISSION"
     private val arbitraryActionCode = 200
 
     private val usbManager: UsbManager by lazy {
