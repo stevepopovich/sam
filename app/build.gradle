@@ -59,7 +59,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation 'com.github.felHR85:UsbSerial:6.1.0'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.1-native-mt'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.2-native-mt'
     implementation 'com.google.mlkit:object-detection:16.2.1'
     implementation 'com.otaliastudios:cameraview:2.6.4'
     implementation "io.reactivex.rxjava3:rxkotlin:3.0.1"
