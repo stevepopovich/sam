@@ -33,16 +33,20 @@ class SpeechResultsBusinessLogicEngineTest {
     )
 
     @Test
-    fun `test passing turn on the lights in the bundle sends on to the arduino`() {
+    fun `test passing forward, backward, left, right, stop passes those strings to the arduino`() {
         val bundle: Bundle = relaxedMock()
-        val stringArrayList: ArrayList<String> = arrayListOf("turn on the light")
+        val stringArrayList: ArrayList<String> = arrayListOf("forward, backward, left, right, stop")
 
         every { bundle.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION) } returns stringArrayList
 
         speechResultsBusinessLogicEngine.onSpeechResults(bundle)
 
         verify { mainText.text = stringArrayList.toString() }
-        verify { arduinoInterface.writeStringToSerialPort(serialPortInterface, "on") }
+        verify { arduinoInterface.writeStringToSerialPort(serialPortInterface, "forward") }
+        verify { arduinoInterface.writeStringToSerialPort(serialPortInterface, "backward") }
+        verify { arduinoInterface.writeStringToSerialPort(serialPortInterface, "left") }
+        verify { arduinoInterface.writeStringToSerialPort(serialPortInterface, "right") }
+        verify { arduinoInterface.writeStringToSerialPort(serialPortInterface, "stop") }
 
         confirmVerified(mainText, arduinoDevice, usbManager, arduinoInterface, serialPortInterface)
     }

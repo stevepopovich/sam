@@ -1,6 +1,5 @@
 package com.stevenpopovich.talktothat
 
-import com.stevenpopovich.talktothat.cameraengine.CameraEngine
 import com.stevenpopovich.talktothat.speechrecognition.ContinuousSpeechRecognizer
 import com.stevenpopovich.talktothat.speechrecognition.SpeechResultsBusinessLogicEngine
 import com.stevenpopovich.talktothat.testutils.relaxedMock
@@ -13,19 +12,16 @@ class AppEngineTests {
     fun start() {
         val continuousSpeechRecognizer: ContinuousSpeechRecognizer = relaxedMock()
         val logicEngine: SpeechResultsBusinessLogicEngine = relaxedMock()
-        val cameraEngine: CameraEngine = relaxedMock()
 
         val appEngine = AppEngine()
 
         appEngine.start(
             continuousSpeechRecognizer,
-            logicEngine,
-            cameraEngine
+            logicEngine
         )
 
-        verifyExactlyOne { cameraEngine.start() }
         verifyExactlyOne { continuousSpeechRecognizer.startListening(any(), any()) }
 
-        confirmVerified(continuousSpeechRecognizer, logicEngine, cameraEngine)
+        confirmVerified(continuousSpeechRecognizer, logicEngine)
     }
 }
