@@ -50,4 +50,18 @@ class SpeechResultsBusinessLogicEngineTest {
 
         confirmVerified(mainText, arduinoDevice, usbManager, arduinoInterface, serialPortInterface)
     }
+
+    @Test
+    fun `test optional parameters`() {
+        val bundle: Bundle = relaxedMock()
+
+        val engine = SpeechResultsBusinessLogicEngine(
+            mainText,
+            usbManager,
+            debugTextView,
+            mainFragment
+        )
+
+        engine.onSpeechResults(bundle)
+    }
 }
