@@ -66,7 +66,7 @@ dependencies {
     testImplementation 'junit:junit:4.13.1'
     testImplementation 'io.mockk:mockk:1.10.2'
     testImplementation 'com.github.dpreussler:android-tdd-utils:v0.1'
-    testImplementation "org.mockito:mockito-core:3.6.0"
+    testImplementation "org.mockito:mockito-core:3.6.28"
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     androidTestImplementation "io.mockk:mockk-android:1.10.2"
