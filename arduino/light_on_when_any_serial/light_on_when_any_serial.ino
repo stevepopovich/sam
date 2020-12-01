@@ -98,9 +98,9 @@ void readDistance() {
   // Calculating the distance
   distance = duration * 0.034 / 2; // Speed of sound wave divided by 2 (go and back)
   // Displays the distance on the Serial Monitor
-  Serial.print("Distance: ");
-  Serial.print(distance);
-  Serial.println(" cm");
+//  Serial.print("Distance: ");
+//  Serial.print(distance);
+//  Serial.println(" cm");
 }
 
 void spinCounterClockwise() {
