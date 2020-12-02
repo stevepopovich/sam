@@ -26,7 +26,7 @@ class RectangleDrawableTest {
             paint.style = Paint.Style.STROKE
             paint.color = Color.YELLOW
 
-            canvas.drawRect(rect, paint)
+            canvas.drawRect(rect.moveXOneThirdRight(), paint)
         }
 
         confirmVerified(rect, canvas, paint)

@@ -26,7 +26,6 @@ class ObjectDetectorBuilderTest {
                 builder
                     .setDetectorMode(ObjectDetectorOptions.STREAM_MODE)
                     .enableMultipleObjects()
-                    .enableClassification()
                     .build()
             )
         } returns expectedObjectDetector
@@ -37,7 +36,6 @@ class ObjectDetectorBuilderTest {
             val clientOptions = builder
                 .setDetectorMode(ObjectDetectorOptions.STREAM_MODE)
                 .enableMultipleObjects()
-                .enableClassification()
                 .build()
             ObjectDetection.getClient(clientOptions)
         }

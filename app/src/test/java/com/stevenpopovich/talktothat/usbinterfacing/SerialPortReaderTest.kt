@@ -30,7 +30,7 @@ class SerialPortReaderTest {
 
     @Test
     fun `optional parameter`() {
-        val serialPortReader = SerialPortReader(
+        SerialPortReader(
             debugTextView,
             mainFragment
         )

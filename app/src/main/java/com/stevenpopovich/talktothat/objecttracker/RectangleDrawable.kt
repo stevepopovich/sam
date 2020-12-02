@@ -24,7 +24,7 @@ class RectangleDrawable(private val drawRect: Rect, private val paint: Paint = P
 }
 
 // Not sure why we need to do this, but we do
-private fun Rect.moveXOneThirdRight(): Rect {
+fun Rect.moveXOneThirdRight(): Rect {
     val width = this.width()
     val shortenedWidth = (width * .33).toInt()
     this.offset(shortenedWidth, 0)
