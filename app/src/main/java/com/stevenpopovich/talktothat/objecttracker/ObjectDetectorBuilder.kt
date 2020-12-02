@@ -9,7 +9,6 @@ class ObjectDetectorBuilder {
         val clientOptions = builder
             .setDetectorMode(ObjectDetectorOptions.STREAM_MODE)
             .enableMultipleObjects()
-            .enableClassification()
             .build()
 
         return ObjectDetection.getClient(clientOptions)
