@@ -10,9 +10,7 @@ class DetectedObjectSuccessListener(
     override fun onSuccess(objects: MutableList<DetectedObject>?) {
         cameraView.overlay.clear()
         objects?.forEach {
-            if (it.labels.map { it.text }.contains("Fashion good")) {
-                cameraView.overlay.add(RectangleDrawable(it.boundingBox))
-            }
+            cameraView.overlay.add(RectangleDrawable(it.boundingBox))
         }
     }
 }

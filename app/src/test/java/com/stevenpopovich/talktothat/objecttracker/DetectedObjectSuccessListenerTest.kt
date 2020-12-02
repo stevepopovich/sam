@@ -22,15 +22,6 @@ class DetectedObjectSuccessListenerTest {
         every { object1.boundingBox } returns relaxedMock()
         every { object2.boundingBox } returns relaxedMock()
 
-        val label1: DetectedObject.Label = relaxedMock()
-        every { label1.text } returns "Fashion good"
-
-        val label2: DetectedObject.Label = relaxedMock()
-        every { label2.text } returns "not a fashion good"
-
-        every { object1.labels } returns listOf(label1)
-        every { object2.labels } returns listOf(label2)
-
         every { cameraView.overlay } returns overlay
 
         every { overlay.clear() } returns Unit
@@ -41,14 +32,12 @@ class DetectedObjectSuccessListenerTest {
 
         verifySequence {
             cameraView.overlay
-            object1.labels
-            label1.text
             cameraView.overlay
             object1.boundingBox
-            object2.labels
-            label2.text
+            cameraView.overlay
+            object2.boundingBox
         }
 
-        confirmVerified(cameraView, object1, object2, label1, label2)
+        confirmVerified(cameraView, object1, object2)
     }
 }

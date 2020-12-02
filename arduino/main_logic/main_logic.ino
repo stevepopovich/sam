@@ -37,7 +37,8 @@ void loop() {
     recvWithEndMarker();
     processData();
     readDistance();
-    delay(250);
+    stopIfDistanceIsShort();
+    delay(50);
 }
 
 void recvWithEndMarker() {
@@ -96,11 +97,16 @@ void readDistance() {
   // Reads the echoPin, returns the sound wave travel time in microseconds
   duration = pulseIn(echoPin, HIGH);
   // Calculating the distance
-  distance = duration * 0.034 / 2; // Speed of sound wave divided by 2 (go and back)
-  // Displays the distance on the Serial Monitor
+  distance = duration * 0.034 / 2; // Speed of sound wave divided by 2 (back and forth)
 //  Serial.print("Distance: ");
 //  Serial.print(distance);
 //  Serial.println(" cm");
+}
+
+void stopIfDistanceIsShort() {
+  if (distance < 10) {
+    stopMoving();  
+  }
 }
 
 void spinCounterClockwise() {
