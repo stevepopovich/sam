@@ -37,8 +37,8 @@ void loop() {
     recvWithEndMarker();
     processData();
     readDistance();
-    stopIfDistanceIsShort();
-    delay(50);
+//    stopIfDistanceIsShort();
+    delay(25);
 }
 
 void recvWithEndMarker() {
@@ -109,7 +109,7 @@ void stopIfDistanceIsShort() {
   }
 }
 
-void spinCounterClockwise() {
+void goForward() {
   analogWrite(enA, 255);
   analogWrite(enB, 255);
   
@@ -119,7 +119,7 @@ void spinCounterClockwise() {
   digitalWrite(in4, HIGH);
 }
 
-void spinClockwise() {
+void goBackward() {
   analogWrite(enA, 255);
   analogWrite(enB, 255);
   
@@ -129,7 +129,7 @@ void spinClockwise() {
   digitalWrite(in4, LOW);
 }
 
-void goForward() {
+void spinClockwise() {
   analogWrite(enA, 255);
   analogWrite(enB, 255);
   
@@ -139,7 +139,7 @@ void goForward() {
   digitalWrite(in4, LOW);
 }
 
-void goBackward() {
+void spinCounterClockwise() {
   analogWrite(enA, 255);
   analogWrite(enB, 255);
   
