@@ -37,7 +37,7 @@ void loop() {
     recvWithEndMarker();
     processData();
     readDistance();
-//    stopIfDistanceIsShort();
+//    stopIfDistanceIsShort(); // Having the phone near the ultrasonic is causing the ultrasonic to short, reading zero
     delay(25);
 }
 
@@ -112,21 +112,21 @@ void stopIfDistanceIsShort() {
 void goForward() {
   analogWrite(enA, 255);
   analogWrite(enB, 255);
-  
-  digitalWrite(in1, LOW);
-  digitalWrite(in2, HIGH);
-  digitalWrite(in3, LOW);
-  digitalWrite(in4, HIGH);
+    
+  digitalWrite(in1, HIGH);
+  digitalWrite(in2, LOW);
+  digitalWrite(in3, HIGH);
+  digitalWrite(in4, LOW);
 }
 
 void goBackward() {
   analogWrite(enA, 255);
   analogWrite(enB, 255);
   
-  digitalWrite(in1, HIGH);
-  digitalWrite(in2, LOW);
-  digitalWrite(in3, HIGH);
-  digitalWrite(in4, LOW);
+  digitalWrite(in1, LOW);
+  digitalWrite(in2, HIGH);
+  digitalWrite(in3, LOW);
+  digitalWrite(in4, HIGH);
 }
 
 void spinClockwise() {
