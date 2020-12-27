@@ -13,7 +13,6 @@ class FaceDetectionEngine(
         FaceDetectorOptions.Builder()
     )
 ) : FrameProcessor {
-
     override fun process(frame: Frame) {
         val inputImage = inputImageBuilder.buildImageFromFrame(frame)
         faceDetector
