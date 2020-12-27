@@ -3,11 +3,13 @@ package com.stevenpopovich.talktothat.cameraengine
 import com.otaliastudios.cameraview.CameraView
 import com.otaliastudios.cameraview.controls.Engine
 import com.otaliastudios.cameraview.controls.Facing
-import com.stevenpopovich.talktothat.objecttracker.ObjectTracker
+import com.stevenpopovich.talktothat.cameraengine.facialdetection.FacialDetectionEngine
+import com.stevenpopovich.talktothat.cameraengine.objecttracker.ObjectTracker
 
 class CameraEngine(
     private val camera: CameraView,
-    private val objectTracker: ObjectTracker
+    private val objectTracker: ObjectTracker,
+    private val facialDetectionEngine: FacialDetectionEngine
 ) {
     fun start() {
         camera.facing = Facing.BACK
@@ -16,5 +18,6 @@ class CameraEngine(
         camera.engine = Engine.CAMERA2
 
         camera.addFrameProcessor(objectTracker)
+        camera.addFrameProcessor(facialDetectionEngine)
     }
 }
