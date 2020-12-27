@@ -11,8 +11,10 @@ import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import com.otaliastudios.cameraview.CameraView
 import com.stevenpopovich.talktothat.cameraengine.CameraEngine
-import com.stevenpopovich.talktothat.objecttracker.DetectedObjectSuccessListener
-import com.stevenpopovich.talktothat.objecttracker.ObjectTracker
+import com.stevenpopovich.talktothat.cameraengine.facialdetection.FaceDetectionSuccessListener
+import com.stevenpopovich.talktothat.cameraengine.facialdetection.FacialDetectionEngine
+import com.stevenpopovich.talktothat.cameraengine.objecttracker.DetectedObjectSuccessListener
+import com.stevenpopovich.talktothat.cameraengine.objecttracker.ObjectTracker
 import com.stevenpopovich.talktothat.speechrecognition.ContinuousSpeechRecognizer
 import com.stevenpopovich.talktothat.speechrecognition.SpeechResultsBusinessLogicEngine
 
@@ -62,7 +64,11 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         AppEngine().start(
             ContinuousSpeechRecognizer(speechRecognizer),
             speechResultsBusinessLogicEngine,
-            CameraEngine(camera, ObjectTracker(DetectedObjectSuccessListener(camera)))
+            CameraEngine(
+                camera,
+                ObjectTracker(DetectedObjectSuccessListener(camera)),
+                FacialDetectionEngine(FaceDetectionSuccessListener(camera))
+            )
         )
     }
 }
