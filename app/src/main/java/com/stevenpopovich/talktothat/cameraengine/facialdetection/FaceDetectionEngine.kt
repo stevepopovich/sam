@@ -6,7 +6,7 @@ import com.otaliastudios.cameraview.frame.Frame
 import com.otaliastudios.cameraview.frame.FrameProcessor
 import com.stevenpopovich.talktothat.cameraengine.InputImageBuilder
 
-class FacialDetectionEngine(
+class FaceDetectionEngine(
     private val faceDetectionSuccessListener: FaceDetectionSuccessListener,
     private val inputImageBuilder: InputImageBuilder = InputImageBuilder(),
     private val faceDetector: FaceDetector = FaceDetectorBuilder().getDetector(

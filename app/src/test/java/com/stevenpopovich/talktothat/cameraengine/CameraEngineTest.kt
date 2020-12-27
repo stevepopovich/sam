@@ -3,6 +3,7 @@ package com.stevenpopovich.talktothat.cameraengine
 import com.otaliastudios.cameraview.CameraView
 import com.otaliastudios.cameraview.controls.Engine
 import com.otaliastudios.cameraview.controls.Facing
+import com.stevenpopovich.talktothat.cameraengine.facialdetection.FaceDetectionEngine
 import com.stevenpopovich.talktothat.cameraengine.objecttracker.ObjectTracker
 import com.stevenpopovich.talktothat.testutils.relaxedMock
 import io.mockk.confirmVerified
@@ -12,8 +13,9 @@ import org.junit.Test
 class CameraEngineTest {
     private val camera: CameraView = relaxedMock()
     private val objectTracker: ObjectTracker = relaxedMock()
+    private val faceDetectionEngine: FaceDetectionEngine = relaxedMock()
 
-    private val cameraEngine = CameraEngine(camera, objectTracker)
+    private val cameraEngine = CameraEngine(camera, objectTracker, faceDetectionEngine)
 
     @Test
     fun testCameraEngineCanStart() {
@@ -26,6 +28,7 @@ class CameraEngineTest {
             camera.engine = Engine.CAMERA2
 
             camera.addFrameProcessor(objectTracker)
+            camera.addFrameProcessor(faceDetectionEngine)
         }
 
         confirmVerified(camera, objectTracker)
