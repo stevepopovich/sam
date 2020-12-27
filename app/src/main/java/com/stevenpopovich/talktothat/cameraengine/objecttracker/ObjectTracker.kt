@@ -1,4 +1,4 @@
-package com.stevenpopovich.talktothat.objecttracker
+package com.stevenpopovich.talktothat.cameraengine.objecttracker
 
 import com.google.mlkit.vision.objects.ObjectDetector
 import com.google.mlkit.vision.objects.defaults.ObjectDetectorOptions

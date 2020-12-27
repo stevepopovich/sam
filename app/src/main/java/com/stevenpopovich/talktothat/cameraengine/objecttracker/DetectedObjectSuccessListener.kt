@@ -1,4 +1,4 @@
-package com.stevenpopovich.talktothat.objecttracker
+package com.stevenpopovich.talktothat.cameraengine.objecttracker
 
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.mlkit.vision.objects.DetectedObject
