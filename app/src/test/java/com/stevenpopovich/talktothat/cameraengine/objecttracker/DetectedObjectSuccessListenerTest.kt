@@ -11,7 +11,7 @@ import org.junit.Test
 
 class DetectedObjectSuccessListenerTest {
     @Test
-    fun `test we can get detected object success listener`() {
+    fun `test we draw boxes on the camera when we have detected objects`() {
         val cameraView: CameraView = relaxedMock()
         val object1: DetectedObject = relaxedMock()
         val object2: DetectedObject = relaxedMock()
