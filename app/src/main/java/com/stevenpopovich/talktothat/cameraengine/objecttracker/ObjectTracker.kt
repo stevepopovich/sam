@@ -4,6 +4,7 @@ import com.google.mlkit.vision.objects.ObjectDetector
 import com.google.mlkit.vision.objects.defaults.ObjectDetectorOptions
 import com.otaliastudios.cameraview.frame.Frame
 import com.otaliastudios.cameraview.frame.FrameProcessor
+import com.stevenpopovich.talktothat.cameraengine.InputImageBuilder
 
 class ObjectTracker(
     private val onSuccessListener: DetectedObjectSuccessListener,

@@ -1,4 +1,4 @@
-package com.stevenpopovich.talktothat.objecttracker
+package com.stevenpopovich.talktothat.cameraengine
 
 import com.google.mlkit.vision.common.InputImage
 import com.otaliastudios.cameraview.frame.Frame

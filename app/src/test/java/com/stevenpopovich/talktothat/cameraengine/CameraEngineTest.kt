@@ -3,7 +3,7 @@ package com.stevenpopovich.talktothat.cameraengine
 import com.otaliastudios.cameraview.CameraView
 import com.otaliastudios.cameraview.controls.Engine
 import com.otaliastudios.cameraview.controls.Facing
-import com.stevenpopovich.talktothat.objecttracker.ObjectTracker
+import com.stevenpopovich.talktothat.cameraengine.objecttracker.ObjectTracker
 import com.stevenpopovich.talktothat.testutils.relaxedMock
 import io.mockk.confirmVerified
 import io.mockk.verifyOrder
