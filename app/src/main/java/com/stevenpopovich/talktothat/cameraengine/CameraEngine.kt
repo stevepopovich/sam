@@ -13,7 +13,7 @@ class CameraEngine(
 ) {
     fun start() {
         camera.facing = Facing.BACK
-        camera.previewFrameRate = 30f
+        camera.previewFrameRate = 33.3f
         camera.previewFrameRateExact = true
         camera.engine = Engine.CAMERA2
 
