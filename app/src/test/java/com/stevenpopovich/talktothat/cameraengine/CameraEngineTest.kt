@@ -27,7 +27,7 @@ class CameraEngineTest {
             camera.previewFrameRateExact = true
             camera.engine = Engine.CAMERA2
 
-            camera.addFrameProcessor(objectTracker)
+//            camera.addFrameProcessor(objectTracker)
             camera.addFrameProcessor(faceDetectionEngine)
         }
 
