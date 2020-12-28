@@ -38,7 +38,6 @@ void loop() {
     processData();
     readDistance();
 //    stopIfDistanceIsShort(); // Having the phone near the ultrasonic is causing the ultrasonic to short, reading zero
-    delay(25);
 }
 
 void recvWithEndMarker() {
@@ -69,17 +68,19 @@ void processData() {
         if (strcmp(receivedChars, "forward") == 0) {
           goForward();
         }
-        if (strcmp(receivedChars, "backward") == 0) {
+        else if (strcmp(receivedChars, "backward") == 0) {
           goBackward();
         }
-        if (strcmp(receivedChars, "left") == 0) {
-          spinCounterClockwise();
+        else if (strcmp(receivedChars, "left") == 0) {
+          spinCounterClockwise(255);
         }
-        if (strcmp(receivedChars, "right") == 0) {
-          spinClockwise();
+        else if (strcmp(receivedChars, "right") == 0) {
+          spinClockwise(255);
         }
-        if (strcmp(receivedChars, "stop") == 0) {
+        else if (strcmp(receivedChars, "stop") == 0) {
           stopMoving();
+        } else { // expecting just a number -255 - 255
+          spinByNumber(atoi(receivedChars));
         }
         
         newData = false;
@@ -129,9 +130,9 @@ void goBackward() {
   digitalWrite(in4, HIGH);
 }
 
-void spinClockwise() {
-  analogWrite(enA, 255);
-  analogWrite(enB, 255);
+void spinClockwise(int spinSpeed) {
+  analogWrite(enA, spinSpeed);
+  analogWrite(enB, spinSpeed);
   
   digitalWrite(in1, LOW);
   digitalWrite(in2, HIGH);
@@ -139,14 +140,25 @@ void spinClockwise() {
   digitalWrite(in4, LOW);
 }
 
-void spinCounterClockwise() {
-  analogWrite(enA, 255);
-  analogWrite(enB, 255);
+void spinCounterClockwise(int spinSpeed) {
+  analogWrite(enA, spinSpeed);
+  analogWrite(enB, spinSpeed);
   
   digitalWrite(in1, HIGH);
   digitalWrite(in2, LOW);
   digitalWrite(in3, LOW);
   digitalWrite(in4, HIGH);
+}
+
+// 50 is about the lowest value this can take without stalling
+void spinByNumber(int value) {
+  if (value == 0) {
+    stopMoving();
+  } else if (value > 0) {
+    spinClockwise(value);
+  } else {
+    spinCounterClockwise(-value);
+  }   
 }
 
 void stopMoving() {
