@@ -1,7 +1,8 @@
-package com.stevenpopovich.talktothat.objecttracker
+package com.stevenpopovich.talktothat.cameraengine.objecttracker
 
 import com.google.mlkit.vision.objects.ObjectDetector
 import com.otaliastudios.cameraview.frame.Frame
+import com.stevenpopovich.talktothat.cameraengine.InputImageBuilder
 import com.stevenpopovich.talktothat.testutils.relaxedMock
 import io.mockk.confirmVerified
 import io.mockk.verifySequence
