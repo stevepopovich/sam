@@ -30,19 +30,19 @@ class SpeechResultsBusinessLogicEngine(
             mainText.text = speechResults.toString()
 
             if (speechResults?.any { it.contains("forward") } == true) {
-                arduinoInterface.writeStringToSerialPort(serialPort, "forward")
+//                arduinoInterface.writeStringToSerialPort(serialPort, "forward")
             }
             if (speechResults?.any { it.contains("backward") } == true) {
-                arduinoInterface.writeStringToSerialPort(serialPort, "backward")
+//                arduinoInterface.writeStringToSerialPort(serialPort, "backward")
             }
             if (speechResults?.any { it.contains("stop") } == true) {
-                arduinoInterface.writeStringToSerialPort(serialPort, "stop")
+//                arduinoInterface.writeStringToSerialPort(serialPort, "stop")
             }
             if (speechResults?.any { it.contains("left") } == true) {
-                arduinoInterface.writeStringToSerialPort(serialPort, "left")
+//                arduinoInterface.writeStringToSerialPort(serialPort, "left")
             }
             if (speechResults?.any { it.contains("right") } == true) {
-                arduinoInterface.writeStringToSerialPort(serialPort, "right")
+//                arduinoInterface.writeStringToSerialPort(serialPort, "right")
             }
         }
     }

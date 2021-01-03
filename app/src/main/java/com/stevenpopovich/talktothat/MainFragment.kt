@@ -67,7 +67,14 @@ class MainFragment : Fragment(R.layout.fragment_main) {
             CameraEngine(
                 camera,
                 ObjectTracker(DetectedObjectSuccessListener(camera)),
-                FaceDetectionEngine(FaceDetectionSuccessListener(camera))
+                FaceDetectionEngine(
+                    FaceDetectionSuccessListener(
+                        camera,
+                        usbManager,
+                        debugText,
+                        this
+                    )
+                )
             )
         )
     }
