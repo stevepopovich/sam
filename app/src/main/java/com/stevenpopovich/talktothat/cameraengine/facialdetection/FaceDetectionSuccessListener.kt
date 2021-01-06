@@ -38,7 +38,6 @@ class FaceDetectionSuccessListener(
             faces?.firstOrNull()?.let { face ->
                 val movedBoundingBox = face.boundingBox.moveXOneThirdRight() // WTF
                 drawFaces(mutableListOf(movedBoundingBox))
-                getSpinSpeedByXDistance(movedBoundingBox)
                 serialPortInterface?.let { serialPortInterface ->
                     arduinoInterface.writeStringToSerialPort(
                         serialPortInterface,
