@@ -13,7 +13,7 @@ class RectangleDrawable(private val drawRect: Rect, private val paint: Paint = P
         paint.style = Paint.Style.STROKE
         paint.color = Color.YELLOW
 
-        canvas.drawRect(drawRect.moveXOneThirdRight(), paint)
+        canvas.drawRect(drawRect, paint)
     }
 
     override fun setAlpha(alpha: Int) {}
