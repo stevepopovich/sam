@@ -42,11 +42,11 @@ class SpeechResultsBusinessLogicEngineTest {
         speechResultsBusinessLogicEngine.onSpeechResults(bundle)
 
         verify { mainText.text = stringArrayList.toString() }
-        verify { arduinoInterface.writeStringToSerialPort(serialPortInterface, "forward") }
-        verify { arduinoInterface.writeStringToSerialPort(serialPortInterface, "backward") }
-        verify { arduinoInterface.writeStringToSerialPort(serialPortInterface, "left") }
-        verify { arduinoInterface.writeStringToSerialPort(serialPortInterface, "right") }
-        verify { arduinoInterface.writeStringToSerialPort(serialPortInterface, "stop") }
+//        verify { arduinoInterface.writeStringToSerialPort(serialPortInterface, "forward") }
+//        verify { arduinoInterface.writeStringToSerialPort(serialPortInterface, "backward") }
+//        verify { arduinoInterface.writeStringToSerialPort(serialPortInterface, "left") }
+//        verify { arduinoInterface.writeStringToSerialPort(serialPortInterface, "right") }
+//        verify { arduinoInterface.writeStringToSerialPort(serialPortInterface, "stop") }
 
         confirmVerified(mainText, arduinoDevice, usbManager, arduinoInterface, serialPortInterface)
     }
