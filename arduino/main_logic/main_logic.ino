@@ -1,10 +1,6 @@
-const int enA = 9;
-const int in1 = 8;
-const int in2 = 7;
-
-const int enB = 3;
-const int in3 = 5;
-const int in4 = 4;
+#include <Wire.h>
+#include <Adafruit_MotorShield.h>
+#include "utility/Adafruit_MS_PWMServoDriver.h"
 
 const int trigPin = 13;
 const int echoPin = 12;
@@ -14,21 +10,18 @@ char receivedChars[numChars];
 
 boolean newData = false;
 
-float duration, distance;
+int currStep = 0;
+
+Adafruit_MotorShield AFMS = Adafruit_MotorShield(); 
+
+Adafruit_DCMotor *motor1 = AFMS.getMotor(1);
+Adafruit_DCMotor *motor2 = AFMS.getMotor(2);
+Adafruit_StepperMotor *stepper = AFMS.getStepper(200, 2);
 
 void setup() {
     Serial.begin(9600);
 
-    // Set all the motor control pins to outputs
-    pinMode(enA, OUTPUT);
-    pinMode(enB, OUTPUT);
-    pinMode(in1, OUTPUT);
-    pinMode(in2, OUTPUT);
-    pinMode(in3, OUTPUT);
-    pinMode(in4, OUTPUT);
-
-    pinMode(trigPin, OUTPUT);
-    pinMode(echoPin, INPUT);
+    AFMS.begin();
     
     stopMoving();
 }
@@ -37,7 +30,9 @@ void loop() {
     recvWithEndMarker();
     processData();
     readDistance();
-//    stopIfDistanceIsShort(); // Having the phone near the ultrasonic is causing the ultrasonic to short, reading zero
+  //    stopIfDistanceIsShort(); // Having the phone near the ultrasonic is causing the ultrasonic to short, reading zero
+  
+    delay(25);
 }
 
 void recvWithEndMarker() {
@@ -96,58 +91,53 @@ void readDistance() {
   delayMicroseconds(10);
   digitalWrite(trigPin, LOW);
   // Reads the echoPin, returns the sound wave travel time in microseconds
-  duration = pulseIn(echoPin, HIGH);
+//  duration = pulseIn(echoPin, HIGH);
   // Calculating the distance
-  distance = duration * 0.034 / 2; // Speed of sound wave divided by 2 (back and forth)
+//  distance = duration * 0.034 / 2; // Speed of sound wave divided by 2 (back and forth)
 //  Serial.print("Distance: ");
 //  Serial.print(distance);
 //  Serial.println(" cm");
 }
 
 void stopIfDistanceIsShort() {
-  if (distance < 10) {
-    stopMoving();  
-  }
+//  if (distance < 10) {
+//    stopMoving();  
+//  }
 }
 
-void goForward() {
-  analogWrite(enA, 255);
-  analogWrite(enB, 255);
-    
-  digitalWrite(in1, HIGH);
-  digitalWrite(in2, LOW);
-  digitalWrite(in3, HIGH);
-  digitalWrite(in4, LOW);
+void goForward() { 
+  motor1->setSpeed(255);
+  motor2->setSpeed(255);
+
+  motor1->run(FORWARD);
+  motor2->run(FORWARD);
 }
 
 void goBackward() {
-  analogWrite(enA, 255);
-  analogWrite(enB, 255);
-  
-  digitalWrite(in1, LOW);
-  digitalWrite(in2, HIGH);
-  digitalWrite(in3, LOW);
-  digitalWrite(in4, HIGH);
+  motor1->setSpeed(255);
+  motor2->setSpeed(255);
+
+  motor1->run(BACKWARD);
+  motor2->run(BACKWARD);
+
+//  stepper->setSpeed(255);
+//  stepper->step(10, FORWARD, MICROSTEP);
 }
 
 void spinClockwise(int spinSpeed) {
-  analogWrite(enA, spinSpeed);
-  analogWrite(enB, spinSpeed);
-  
-  digitalWrite(in1, LOW);
-  digitalWrite(in2, HIGH);
-  digitalWrite(in3, HIGH);
-  digitalWrite(in4, LOW);
+  motor1->setSpeed(spinSpeed);
+  motor2->setSpeed(spinSpeed);
+
+  motor1->run(BACKWARD);
+  motor2->run(FORWARD);
 }
 
 void spinCounterClockwise(int spinSpeed) {
-  analogWrite(enA, spinSpeed);
-  analogWrite(enB, spinSpeed);
-  
-  digitalWrite(in1, HIGH);
-  digitalWrite(in2, LOW);
-  digitalWrite(in3, LOW);
-  digitalWrite(in4, HIGH);
+  motor1->setSpeed(spinSpeed);
+  motor2->setSpeed(spinSpeed);
+
+  motor1->run(FORWARD);
+  motor2->run(BACKWARD);
 }
 
 // 50 is about the lowest value this can take without stalling
@@ -158,10 +148,10 @@ void spinByNumber(int value) {
     spinClockwise(value);
   } else {
     spinCounterClockwise(-value);
-  }   
+  } 
 }
 
 void stopMoving() {
-  analogWrite(enA, 0);
-  analogWrite(enB, 0);
+  motor1->setSpeed(0);
+  motor2->setSpeed(0);  
 }
