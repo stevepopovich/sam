@@ -63,7 +63,7 @@ dependencies {
     implementation 'com.google.mlkit:object-detection:16.2.2'
     implementation 'com.otaliastudios:cameraview:2.7.0'
     implementation "io.reactivex.rxjava3:rxkotlin:3.0.1"
-    implementation 'com.google.mlkit:face-detection:16.0.3'
+    implementation 'com.google.mlkit:face-detection:16.0.4'
     testImplementation 'junit:junit:4.13.1'
     testImplementation 'io.mockk:mockk:1.10.5'
     testImplementation 'com.github.dpreussler:android-tdd-utils:v0.1'
