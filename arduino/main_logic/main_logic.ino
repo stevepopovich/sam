@@ -24,6 +24,9 @@ void setup() {
     AFMS.begin();
     
     stopMoving();
+
+    stepper->setSpeed(255);
+    stepper->step(0, FORWARD, DOUBLE);
 }
 
 void loop() {
