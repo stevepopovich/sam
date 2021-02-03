@@ -8,7 +8,8 @@ class FaceDetectorBuilder {
     fun getDetector(builder: FaceDetectorOptions.Builder): FaceDetector {
         return FaceDetection.getClient(
             builder
-                .enableTracking()
+                .setPerformanceMode(FaceDetectorOptions.PERFORMANCE_MODE_FAST)
+                .setClassificationMode(FaceDetectorOptions.CLASSIFICATION_MODE_NONE)
                 .build()
         )
     }
