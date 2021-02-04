@@ -25,7 +25,7 @@ class PID
     private var proportionalOn: ProportionalOn = ProportionalOn.ERROR,
     private var timeFunction: () -> Long = { System.currentTimeMillis() }
 ) {
-    private var inAuto: Boolean = false
+    private var inAuto: Boolean = true
     private var lastTime: Long = 0
     private var sampleTime: Long = 100
     private var lastInput: Double = 0.0
