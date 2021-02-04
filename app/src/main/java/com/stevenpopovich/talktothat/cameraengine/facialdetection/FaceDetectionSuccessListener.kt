@@ -8,12 +8,16 @@ import com.google.mlkit.vision.face.Face
 import com.otaliastudios.cameraview.CameraView
 import com.stevenpopovich.talktothat.MainFragment
 import com.stevenpopovich.talktothat.cameraengine.RectangleDrawable
-import com.stevenpopovich.talktothat.cameraengine.moveXOneThirdRight
 import com.stevenpopovich.talktothat.usbinterfacing.ArduinoInterface
 import com.stevenpopovich.talktothat.usbinterfacing.SerialPortInterface
 import com.stevenpopovich.talktothat.usbinterfacing.SerialPortInterfaceBuilder
 import com.stevenpopovich.talktothat.usbinterfacing.SerialPortReader
-import kotlin.math.absoluteValue
+import com.stevenpopovich.talktothat.verboseLog
+
+const val HORIZONTAL_KP = 0.05
+const val HORIZONTAL_KI = 0.05
+const val HORIZONTAL_KD = 0.05
+val HORIZONTAL_CONTROLLER_DIRECTION = ControllerDirection.DIRECT
 
 class FaceDetectionSuccessListener(
     private val cameraView: CameraView,
@@ -26,8 +30,23 @@ class FaceDetectionSuccessListener(
             SerialPortReader(debugTextView, mainFragment),
             usbManager,
             arduinoInterface
-        )
+        ),
+    private val horizontalProcess: Process = FaceTrackingProcess(0.0, 0.0, 0.0),
+    private val horizontalPid: PID = PID(
+        horizontalProcess,
+        HORIZONTAL_KP,
+        HORIZONTAL_KI,
+        HORIZONTAL_KD,
+        HORIZONTAL_CONTROLLER_DIRECTION
+    )
 ) : OnSuccessListener<MutableList<Face>> {
+
+    init {
+        horizontalPid.setMode(ControllerMode.AUTOMATIC)
+        horizontalPid.setOutputLimits(0.0, 180.0)
+        horizontalProcess.setpoint = cameraView.width.toDouble() / 2.0
+    }
+
     override fun onSuccess(faces: MutableList<Face>?) {
         if (faces?.isNullOrEmpty() != false) {
             cameraView.overlay.clear()
@@ -36,46 +55,25 @@ class FaceDetectionSuccessListener(
             }
         } else {
             faces?.firstOrNull()?.let { face ->
-                val movedBoundingBox = face.boundingBox.moveXOneThirdRight() // WTF
-                drawFaces(mutableListOf(movedBoundingBox))
+                horizontalProcess.input = face.boundingBox.centerX().toDouble()
+                horizontalPid.compute()
+
+                val correctOutput = if (face.boundingBox.centerX() < horizontalProcess.setpoint)
+                    -horizontalProcess.output
+                else
+                    horizontalProcess.output
+
+                correctOutput.verboseLog()
+                drawFaces(mutableListOf(face.boundingBox))
+//                getSpinSpeedByXDistance(movedBoundingBox).toString()
                 serialPortInterface?.let { serialPortInterface ->
                     arduinoInterface.writeStringToSerialPort(
                         serialPortInterface,
-                        getSpinSpeedByXDistance(movedBoundingBox).toString()
+                        correctOutput.toString()
                     )
                 }
             }
         }
-    }
-
-    // Example calculation:
-    // The screen is 1000 across so we want the center of the face to be at 500.
-    // Say the face is at 800 X. The center of the screen is 500 so the 800-500=300.
-    // We need this as a proportion of how far the face is from the center of the screen.
-    // So 300/500 = .6.
-    // We then map that .6 to a value between -255 and 255, because thats what the arduino motors take
-    // So .6 * 255 = 153, which is what we send to the arduino.
-    // Obviously there needs to be a bit of tuning, but this is the idea.
-    // This is the P in PID controller, which you can google.
-    private fun getSpinSpeedByXDistance(face: Rect): Int {
-        val centerOfCameraX = cameraView.width / 2
-        val distance = face.centerX() - centerOfCameraX
-        val distanceAsProportionFromCenter = distance.toDouble() / centerOfCameraX.toDouble()
-
-        if (distanceAsProportionFromCenter.absoluteValue < .25) return 0
-
-        return if (distanceAsProportionFromCenter > 0) {
-            70
-        } else {
-            -70
-        }
-//        val proportionMappedToArduinoSpeeds = distanceAsProportionFromCenter * 140
-//        val scaledArduinoSpeed = if (proportionMappedToArduinoSpeeds > 0)
-//            proportionMappedToArduinoSpeeds + 50
-//        else
-//            proportionMappedToArduinoSpeeds - 50
-
-//        return -scaledArduinoSpeed.toInt()
     }
 
     private fun drawFaces(faces: MutableList<Rect>?) {
