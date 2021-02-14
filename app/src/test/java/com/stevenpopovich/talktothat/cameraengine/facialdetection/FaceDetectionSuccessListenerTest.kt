@@ -8,13 +8,11 @@ import android.widget.TextView
 import com.google.mlkit.vision.face.Face
 import com.otaliastudios.cameraview.CameraView
 import com.stevenpopovich.talktothat.MainFragment
-import com.stevenpopovich.talktothat.cameraengine.moveXOneThirdRight
 import com.stevenpopovich.talktothat.testutils.relaxedMock
 import com.stevenpopovich.talktothat.usbinterfacing.ArduinoInterface
 import com.stevenpopovich.talktothat.usbinterfacing.SerialPortInterface
 import io.mockk.confirmVerified
 import io.mockk.every
-import io.mockk.slot
 import io.mockk.verify
 import io.mockk.verifySequence
 import org.junit.Before
@@ -108,31 +106,27 @@ class FaceDetectionSuccessListenerTest {
         val face2: Face = relaxedMock()
 
         val boundingBox1: Rect = relaxedMock()
-        val movedBoundingBox: Rect = relaxedMock()
 
         val faces: MutableList<Face> = mutableListOf(face1, face2)
 
         every { face1.boundingBox } returns boundingBox1
 
-        every { boundingBox1.moveXOneThirdRight() } returns movedBoundingBox
-
-        val overlayDrawableSlot = slot<Drawable>()
-        every { overlay.add(capture(overlayDrawableSlot)) } returns Unit
+        every { overlay.add(any<Drawable>()) } returns Unit
 
         listener.onSuccess(faces)
 
         verifySequence {
-            boundingBox1.moveXOneThirdRight()
+            cameraView.width
+            boundingBox1.centerX()
             cameraView.overlay
             overlay.clear()
             cameraView.overlay
             overlay.add(any<Drawable>())
-            cameraView.width
-            boundingBox1.centerX()
         }
 
         confirmVerified(
-            cameraView
+            cameraView,
+            overlay
         )
     }
 
@@ -142,13 +136,10 @@ class FaceDetectionSuccessListenerTest {
         val face2: Face = relaxedMock()
 
         val boundingBox1: Rect = relaxedMock()
-        val movedBoundingBox: Rect = relaxedMock()
 
         val faces: MutableList<Face> = mutableListOf(face1, face2)
 
         every { face1.boundingBox } returns boundingBox1
-
-        every { boundingBox1.moveXOneThirdRight() } returns movedBoundingBox
 
         every { boundingBox1.centerX() } returns 300
 
@@ -173,13 +164,10 @@ class FaceDetectionSuccessListenerTest {
         val face2: Face = relaxedMock()
 
         val boundingBox1: Rect = relaxedMock()
-        val movedBoundingBox: Rect = relaxedMock()
 
         val faces: MutableList<Face> = mutableListOf(face1, face2)
 
         every { face1.boundingBox } returns boundingBox1
-
-        every { boundingBox1.moveXOneThirdRight() } returns movedBoundingBox
 
         every { boundingBox1.centerX() } returns 210
 
