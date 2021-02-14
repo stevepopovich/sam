@@ -26,16 +26,14 @@ void setup() {
     stopMoving();
 
     stepper->setSpeed(255);
-    stepper->step(0, FORWARD, DOUBLE);
+    stepper->step(1, FORWARD, DOUBLE);
 }
 
 void loop() {
     recvWithEndMarker();
     processData();
-    readDistance();
+//    readDistance();
   //    stopIfDistanceIsShort(); // Having the phone near the ultrasonic is causing the ultrasonic to short, reading zero
-  
-    delay(25);
 }
 
 void recvWithEndMarker() {

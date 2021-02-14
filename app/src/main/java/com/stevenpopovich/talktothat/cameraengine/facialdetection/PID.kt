@@ -34,7 +34,7 @@ class PID
     private var kp: Double = 0.0
     private var ki: Double = 0.0
     private var kd: Double = 0.0
-    private lateinit var controllerDirection: ControllerDirection
+    private var controllerDirection: ControllerDirection = ControllerDirection.DIRECT
     private var outMax: Double = 0.0
     private var outMin: Double = 0.0
     private var dispKp: Double = 0.0
