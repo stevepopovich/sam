@@ -24,7 +24,8 @@ class FaceDetectorBuilderTest {
         every {
             FaceDetection.getClient(
                 builder
-                    .enableTracking()
+                    .setPerformanceMode(FaceDetectorOptions.PERFORMANCE_MODE_FAST)
+                    .setClassificationMode(FaceDetectorOptions.CLASSIFICATION_MODE_NONE)
                     .build()
             )
         } returns expectedFaceDetector
@@ -34,7 +35,8 @@ class FaceDetectorBuilderTest {
         verifySequence {
             FaceDetection.getClient(
                 builder
-                    .enableTracking()
+                    .setPerformanceMode(FaceDetectorOptions.PERFORMANCE_MODE_FAST)
+                    .setClassificationMode(FaceDetectorOptions.CLASSIFICATION_MODE_NONE)
                     .build()
             )
         }
