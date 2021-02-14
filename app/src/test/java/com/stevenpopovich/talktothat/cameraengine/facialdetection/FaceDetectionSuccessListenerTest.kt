@@ -27,6 +27,8 @@ class FaceDetectionSuccessListenerTest {
     private lateinit var mainFragment: MainFragment
     private lateinit var arduinoInterface: ArduinoInterface
     private lateinit var serialPortInterface: SerialPortInterface
+    private lateinit var horizontalProcess: Process
+    private lateinit var horizontalPid: PID
 
     private lateinit var overlay: ViewGroupOverlay
 
@@ -42,6 +44,8 @@ class FaceDetectionSuccessListenerTest {
         mainFragment = relaxedMock()
         arduinoInterface = relaxedMock()
         serialPortInterface = relaxedMock()
+        horizontalProcess = relaxedMock()
+        horizontalPid = relaxedMock()
 
         overlay = relaxedMock()
 
@@ -51,7 +55,9 @@ class FaceDetectionSuccessListenerTest {
             debugTextView,
             mainFragment,
             arduinoInterface,
-            serialPortInterface
+            serialPortInterface,
+            horizontalProcess,
+            horizontalPid
         )
 
         every { cameraView.overlay } returns overlay
@@ -60,10 +66,23 @@ class FaceDetectionSuccessListenerTest {
     }
 
     @Test
+    fun `test that we set up PID in init`() {
+        verifySequence {
+            horizontalPid.setMode(ControllerMode.AUTOMATIC)
+            horizontalPid.setOutputLimits(-150.0, 150.0)
+            horizontalProcess.setpoint = cameraView.width.toDouble() / 2.0
+        }
+    }
+
+    @Test
     fun `test that if we have no detected faces, we stop moving`() {
         listener.onSuccess(null)
 
         verifySequence {
+            horizontalPid.setMode(ControllerMode.AUTOMATIC)
+            horizontalPid.setOutputLimits(-150.0, 150.0)
+            horizontalProcess.setpoint = cameraView.width.toDouble() / 2.0
+
             cameraView.overlay
             overlay.clear()
             serialPortInterface?.let { serialPortInterface ->
@@ -77,7 +96,9 @@ class FaceDetectionSuccessListenerTest {
             debugTextView,
             mainFragment,
             arduinoInterface,
-            serialPortInterface
+            serialPortInterface,
+            horizontalProcess,
+            horizontalPid
         )
     }
 

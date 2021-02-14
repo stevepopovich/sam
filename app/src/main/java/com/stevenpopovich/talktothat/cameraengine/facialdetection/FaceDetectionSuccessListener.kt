@@ -48,7 +48,7 @@ class FaceDetectionSuccessListener(
     }
 
     override fun onSuccess(faces: MutableList<Face>?) {
-        if (faces?.isNullOrEmpty() == true) {
+        if (faces?.isNullOrEmpty() != false) {
             cameraView.overlay.clear()
             serialPortInterface?.let { serialPortInterface ->
                 arduinoInterface.writeStringToSerialPort(serialPortInterface, 0.toString())
