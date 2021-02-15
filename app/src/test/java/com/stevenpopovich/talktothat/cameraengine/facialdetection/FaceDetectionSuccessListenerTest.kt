@@ -131,7 +131,7 @@ class FaceDetectionSuccessListenerTest {
     }
 
     @Test
-    fun `test that we move to follow the first found face`() {
+    fun `test that we move to follow the first found face if the PID process output is there`() {
         val face1: Face = relaxedMock()
         val face2: Face = relaxedMock()
 
@@ -141,14 +141,42 @@ class FaceDetectionSuccessListenerTest {
 
         every { face1.boundingBox } returns boundingBox1
 
-        every { boundingBox1.centerX() } returns 300
+        every { horizontalProcess.output } returns 100.0
 
         listener.onSuccess(faces)
 
         verify {
             arduinoInterface.writeStringToSerialPort(
                 serialPortInterface,
-                "70"
+                "100.0"
+            )
+        }
+
+        confirmVerified(
+            arduinoInterface,
+            serialPortInterface,
+        )
+    }
+
+    @Test
+    fun `test that we dont move to follow a face with a small PID output`() {
+        val face1: Face = relaxedMock()
+        val face2: Face = relaxedMock()
+
+        val boundingBox1: Rect = relaxedMock()
+
+        val faces: MutableList<Face> = mutableListOf(face1, face2)
+
+        every { face1.boundingBox } returns boundingBox1
+
+        every { horizontalProcess.output } returns 15.0
+
+        listener.onSuccess(faces)
+
+        verify {
+            arduinoInterface.writeStringToSerialPort(
+                serialPortInterface,
+                "0"
             )
         }
 
