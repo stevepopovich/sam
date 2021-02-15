@@ -42,7 +42,6 @@ class FaceDetectionSuccessListener(
 ) : OnSuccessListener<MutableList<Face>> {
 
     init {
-        horizontalPid.setMode(ControllerMode.AUTOMATIC)
         horizontalPid.setOutputLimits(-150.0, 150.0)
         horizontalProcess.setpoint = cameraView.width.toDouble() / 2.0
     }

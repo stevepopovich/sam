@@ -66,7 +66,6 @@ class FaceDetectionSuccessListenerTest {
     @Test
     fun `test that we set up PID in init`() {
         verifySequence {
-            horizontalPid.setMode(ControllerMode.AUTOMATIC)
             horizontalPid.setOutputLimits(-150.0, 150.0)
             horizontalProcess.setpoint = cameraView.width.toDouble() / 2.0
         }
@@ -77,7 +76,6 @@ class FaceDetectionSuccessListenerTest {
         listener.onSuccess(null)
 
         verifySequence {
-            horizontalPid.setMode(ControllerMode.AUTOMATIC)
             horizontalPid.setOutputLimits(-150.0, 150.0)
             horizontalProcess.setpoint = cameraView.width.toDouble() / 2.0
 
