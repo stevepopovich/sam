@@ -42,13 +42,12 @@ class FaceDetectionSuccessListener(
 ) : OnSuccessListener<MutableList<Face>> {
 
     init {
-        horizontalPid.setMode(ControllerMode.AUTOMATIC)
         horizontalPid.setOutputLimits(-150.0, 150.0)
         horizontalProcess.setpoint = cameraView.width.toDouble() / 2.0
     }
 
     override fun onSuccess(faces: MutableList<Face>?) {
-        if (faces?.isNullOrEmpty() == true) {
+        if (faces?.isNullOrEmpty() != false) {
             cameraView.overlay.clear()
             serialPortInterface?.let { serialPortInterface ->
                 arduinoInterface.writeStringToSerialPort(serialPortInterface, 0.toString())

@@ -22,11 +22,3 @@ class RectangleDrawable(private val drawRect: Rect, private val paint: Paint = P
 
     override fun getOpacity(): Int = PixelFormat.OPAQUE
 }
-
-// Not sure why we need to do this, but we do
-fun Rect.moveXOneThirdRight(): Rect {
-    val width = this.width()
-    val shortenedWidth = (width * .33).toInt()
-    this.offset(shortenedWidth, 0)
-    return this
-}
