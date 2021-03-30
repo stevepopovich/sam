@@ -2,8 +2,8 @@
 #include <Adafruit_MotorShield.h>
 #include "utility/Adafruit_MS_PWMServoDriver.h"
 
-const int trigPin = 13;
-const int echoPin = 12;
+const int trigPin = 13;// these will not work
+const int echoPin = 12; // the motor shield or limit switches are using these
 
 const byte numChars = 64;
 char receivedChars[numChars];
@@ -18,6 +18,9 @@ Adafruit_DCMotor *motor1 = AFMS.getMotor(1);
 Adafruit_DCMotor *motor2 = AFMS.getMotor(2);
 Adafruit_StepperMotor *stepper = AFMS.getStepper(200, 2);
 
+int limitSwitchUpper = 13; // this one works great
+int limitSwitchLower = 0; // analog read 
+
 void setup() {
     Serial.begin(9600);
 
@@ -25,8 +28,11 @@ void setup() {
     
     stopMoving();
 
-    stepper->setSpeed(255);
+    stepper->setSpeed(1);
     stepper->step(1, FORWARD, DOUBLE);
+
+    pinMode(limitSwitchUpper, INPUT); // 0 is closed
+    pinMode(limitSwitchLower, INPUT); // 0 is closed
 }
 
 void loop() {
@@ -34,7 +40,24 @@ void loop() {
     processData();
 //    readDistance();
   //    stopIfDistanceIsShort(); // Having the phone near the ultrasonic is causing the ultrasonic to short, reading zero
+//    Serial.println(digitalRead(limitSwitchUpper)); 
+//    Serial.println(analogRead(limitSwitchLower)); 
+
+//    stepper->step(1, FORWARD, DOUBLE); // foward is down
+    articulateFaceIfLegal(-200);
 }
+
+void articulateFaceIfLegal(int value) { // positive is look down
+  if (value > 0 && analogRead(limitSwitchLower) != 0) {
+    stepper->setSpeed(value);
+    stepper->step(1, FORWARD, DOUBLE);
+  } else if (value < 0 && digitalRead(limitSwitchUpper) != 0){
+    stepper->setSpeed(abs(value));
+    stepper->step(1, BACKWARD, DOUBLE);
+  } else  {
+     // Do I need to do anything?
+  }
+} 
 
 void recvWithEndMarker() {
     static byte ndx = 0;
@@ -75,7 +98,7 @@ void processData() {
         }
         else if (strcmp(receivedChars, "stop") == 0) {
           stopMoving();
-        } else { // expecting just a number -255 - 255
+        } else { // expecting just a number `-255/-255` - `255/255`
           spinByNumber(atoi(receivedChars));
         }
         
