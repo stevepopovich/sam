@@ -9,9 +9,7 @@ import com.stevenpopovich.talktothat.cameraengine.InputImageBuilder
 class FaceDetectionEngine(
     private val faceDetectionSuccessListener: FaceDetectionSuccessListener,
     private val inputImageBuilder: InputImageBuilder = InputImageBuilder(),
-    private val faceDetector: FaceDetector = FaceDetectorBuilder().getDetector(
-        FaceDetectorOptions.Builder()
-    )
+    private val faceDetector: FaceDetector = getDetector(FaceDetectorOptions.Builder())
 ) : FrameProcessor {
     override fun process(frame: Frame) {
         val inputImage = inputImageBuilder.buildImageFromFrame(frame)

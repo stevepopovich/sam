@@ -2,9 +2,10 @@ package com.stevenpopovich.talktothat.speechrecognition
 
 import android.os.Bundle
 import android.speech.RecognitionListener
+import com.stevenpopovich.talktothat.MainDependencyModule
 
 class ContinuousSpeechRecognitionListener(
-    private val businessLogic: SpeechResultBusinessLogic,
+    private val speechResultsBusinessLogic: SpeechResultBusinessLogic = MainDependencyModule.speechResultsBusinessLogic,
     private val speechRecognizerRestartLogic: SpeechRecognizerRestartLogic,
 ) : RecognitionListener {
     override fun onReadyForSpeech(params: Bundle?) {}
@@ -19,13 +20,13 @@ class ContinuousSpeechRecognitionListener(
     }
 
     override fun onResults(results: Bundle?) {
-        businessLogic(results)
+        speechResultsBusinessLogic(results)
 
         speechRecognizerRestartLogic(this)
     }
 
     override fun onPartialResults(partialResults: Bundle?) {
-        businessLogic(partialResults)
+        speechResultsBusinessLogic(partialResults)
     }
 
     override fun onEvent(eventType: Int, params: Bundle?) {}

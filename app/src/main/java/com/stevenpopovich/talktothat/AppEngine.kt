@@ -8,10 +8,11 @@ import com.stevenpopovich.talktothat.speechrecognition.SpeechResultsBusinessLogi
 
 class AppEngine {
     fun start(
-        continuousSpeechRecognizer: ContinuousSpeechRecognizer,
-        logicEngine: SpeechResultsBusinessLogicEngine,
-        cameraEngine: CameraEngine,
+        continuousSpeechRecognizer: ContinuousSpeechRecognizer = MainDependencyModule.continuousSpeechRecognizer,
+        logicEngine: SpeechResultsBusinessLogicEngine = MainDependencyModule.speechResultsBusinessLogicEngine,
+        cameraEngine: CameraEngine = MainDependencyModule.cameraEngine,
         intent: Intent = Intent(),
+        // This looks weird - It does this because it needs to know how to restart itself, o
         recognitionListener: ContinuousSpeechRecognitionListener = ContinuousSpeechRecognitionListener(
             logicEngine::onSpeechResults
         ) { continuousSpeechRecognizer.startListening(intent, it) }
