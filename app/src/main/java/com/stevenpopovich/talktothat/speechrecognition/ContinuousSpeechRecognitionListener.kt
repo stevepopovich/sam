@@ -6,7 +6,7 @@ import com.stevenpopovich.talktothat.MainDependencyModule
 
 class ContinuousSpeechRecognitionListener(
     private val speechResultsBusinessLogic: SpeechResultBusinessLogic = MainDependencyModule.speechResultsBusinessLogic,
-    private val speechRecognizerRestartLogic: SpeechRecognizerRestartLogic,
+    private val speechRecognizerRestartLogic: SpeechRecognizerRestartLogic = MainDependencyModule.speechRecognizerRestartLogic,
 ) : RecognitionListener {
     override fun onReadyForSpeech(params: Bundle?) {}
     override fun onBeginningOfSpeech() {}

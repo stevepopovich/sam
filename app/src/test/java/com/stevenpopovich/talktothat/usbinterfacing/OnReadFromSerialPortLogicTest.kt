@@ -1,7 +1,6 @@
 package com.stevenpopovich.talktothat.usbinterfacing
 
 import android.widget.TextView
-import com.stevenpopovich.talktothat.MainFragment
 import com.stevenpopovich.talktothat.testutils.relaxedMock
 import io.mockk.every
 import io.mockk.slot
@@ -11,9 +10,9 @@ import org.junit.Test
 
 class OnReadFromSerialPortLogicTest {
     private val debugTextView: TextView = relaxedMock()
-    private val mainFragment: MainFragment = relaxedMock()
+    private val runOnUIThread: (action: Runnable) -> Unit = relaxedMock()
 
-    private val onReadFromSerialPortLogic = OnReadFromSerialPortLogic(debugTextView, mainFragment)
+    private val onReadFromSerialPortLogic = OnReadFromSerialPortLogic(debugTextView, runOnUIThread)
 
     @Test
     fun `test buffer bytes`() {
@@ -27,13 +26,13 @@ class OnReadFromSerialPortLogicTest {
     @Test
     fun `test core logic`() {
         val runOnUIThreadSlot = slot<Runnable>()
-        every { mainFragment.activity?.runOnUiThread(capture(runOnUIThreadSlot)) } returns Unit
+        every { runOnUIThread(capture(runOnUIThreadSlot)) } returns Unit
 
         onReadFromSerialPortLogic.bufferBytesToPrint("random".toByteArray())
 
         onReadFromSerialPortLogic.logic()
 
-        verify { mainFragment.activity?.runOnUiThread(any()) }
+        verify { runOnUIThread(any()) }
 
         runOnUIThreadSlot.captured.run()
         verify { debugTextView.text = "random" }

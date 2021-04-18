@@ -30,7 +30,7 @@ class ObjectDetectorBuilderTest {
             )
         } returns expectedObjectDetector
 
-        val actualDetector = ObjectDetectorBuilder().getDetector(builder)
+        val actualDetector = getDetector(builder)
 
         verifySequence {
             val clientOptions = builder

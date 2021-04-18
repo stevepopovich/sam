@@ -38,8 +38,7 @@ class InputImageBuilderTest {
             )
         } returns relaxedMock()
 
-        val inputImageBuilder = InputImageBuilder()
-        inputImageBuilder.buildImageFromFrame(frame)
+        buildImageFromFrame(frame)
 
         verifySequence {
             frame.getData<ByteArray>()

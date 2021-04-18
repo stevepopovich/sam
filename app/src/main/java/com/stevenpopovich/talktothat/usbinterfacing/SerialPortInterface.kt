@@ -5,8 +5,8 @@ import com.felhr.usbserial.UsbSerialInterface
 import com.stevenpopovich.talktothat.MainDependencyModule
 
 class SerialPortInterface(
+    private val serialDevice: UsbSerialDevice,
     serialPortReader: SerialPortReader = MainDependencyModule.serialPortReader,
-    private val serialDevice: UsbSerialDevice = MainDependencyModule.serialDevice
 ) {
     init {
         serialDevice.open()

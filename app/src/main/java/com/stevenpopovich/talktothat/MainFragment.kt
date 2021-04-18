@@ -47,6 +47,9 @@ class MainFragment : Fragment(R.layout.fragment_main) {
 
         MainDependencyModule.speechRecognizer = speechRecognizer
         MainDependencyModule.usbManager = usbManager
+        MainDependencyModule.runOnUIThread = this.requireActivity()::runOnUiThread
+
+        MainDependencyModule.inject()
 
         AppEngine().start()
     }
