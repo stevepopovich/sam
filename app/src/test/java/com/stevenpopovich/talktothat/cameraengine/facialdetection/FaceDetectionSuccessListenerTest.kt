@@ -2,12 +2,10 @@ package com.stevenpopovich.talktothat.cameraengine.facialdetection
 
 import android.graphics.Rect
 import android.graphics.drawable.Drawable
-import android.hardware.usb.UsbManager
 import android.view.ViewGroupOverlay
-import android.widget.TextView
 import com.google.mlkit.vision.face.Face
 import com.otaliastudios.cameraview.CameraView
-import com.stevenpopovich.talktothat.MainFragment
+import com.stevenpopovich.talktothat.MainDependencyModule
 import com.stevenpopovich.talktothat.testutils.relaxedMock
 import com.stevenpopovich.talktothat.usbinterfacing.ArduinoInterface
 import com.stevenpopovich.talktothat.usbinterfacing.SerialPortInterface
@@ -20,9 +18,6 @@ import org.junit.Test
 
 class FaceDetectionSuccessListenerTest {
     private lateinit var cameraView: CameraView
-    private lateinit var usbManager: UsbManager
-    private lateinit var debugTextView: TextView
-    private lateinit var mainFragment: MainFragment
     private lateinit var arduinoInterface: ArduinoInterface
     private lateinit var serialPortInterface: SerialPortInterface
     private lateinit var horizontalProcess: Process
@@ -36,12 +31,15 @@ class FaceDetectionSuccessListenerTest {
 
     @Before
     fun setup() {
-        cameraView = relaxedMock()
-        usbManager = relaxedMock()
-        debugTextView = relaxedMock()
-        mainFragment = relaxedMock()
-        arduinoInterface = relaxedMock()
         serialPortInterface = relaxedMock()
+        MainDependencyModule.serialPortInterface = serialPortInterface
+
+        arduinoInterface = relaxedMock()
+        MainDependencyModule.arduinoInterface = arduinoInterface
+
+        cameraView = relaxedMock()
+        MainDependencyModule.camera = cameraView
+
         horizontalProcess = relaxedMock()
         horizontalPid = relaxedMock()
 
@@ -49,13 +47,6 @@ class FaceDetectionSuccessListenerTest {
 
         listener = FaceDetectionSuccessListener(
             cameraView,
-            usbManager,
-            debugTextView,
-            mainFragment,
-            arduinoInterface,
-            serialPortInterface,
-            horizontalProcess,
-            horizontalPid
         )
 
         every { cameraView.overlay } returns overlay
@@ -73,6 +64,7 @@ class FaceDetectionSuccessListenerTest {
 
     @Test
     fun `test that if we have no detected faces, we stop moving`() {
+        horizontalPid = relaxedMock()
         listener.onSuccess(null)
 
         verifySequence {
@@ -88,9 +80,6 @@ class FaceDetectionSuccessListenerTest {
 
         confirmVerified(
             cameraView,
-            usbManager,
-            debugTextView,
-            mainFragment,
             arduinoInterface,
             serialPortInterface,
             horizontalProcess,
@@ -214,11 +203,6 @@ class FaceDetectionSuccessListenerTest {
 
     @Test
     fun `test that we have optional parameters`() {
-        FaceDetectionSuccessListener(
-            cameraView,
-            usbManager,
-            debugTextView,
-            mainFragment
-        )
+        FaceDetectionSuccessListener()
     }
 }

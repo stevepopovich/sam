@@ -30,7 +30,7 @@ class FaceDetectorBuilderTest {
             )
         } returns expectedFaceDetector
 
-        val actualDetector = FaceDetectorBuilder().getDetector(builder)
+        val actualDetector = getDetector(builder)
 
         verifySequence {
             FaceDetection.getClient(

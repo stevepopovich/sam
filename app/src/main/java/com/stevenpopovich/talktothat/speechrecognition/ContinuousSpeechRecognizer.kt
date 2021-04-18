@@ -4,12 +4,13 @@ import android.content.Intent
 import android.os.Bundle
 import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
+import com.stevenpopovich.talktothat.MainDependencyModule
 
 typealias SpeechResultBusinessLogic = (results: Bundle?) -> Unit
 typealias SpeechRecognizerRestartLogic = (speechRecognitionListener: ContinuousSpeechRecognitionListener) -> Unit
 
 class ContinuousSpeechRecognizer(
-    private val speechRecognizer: SpeechRecognizer
+    private val speechRecognizer: SpeechRecognizer = MainDependencyModule.speechRecognizer
 ) {
     fun startListening(intent: Intent, recognitionListener: ContinuousSpeechRecognitionListener) {
         speechRecognizer.destroy()

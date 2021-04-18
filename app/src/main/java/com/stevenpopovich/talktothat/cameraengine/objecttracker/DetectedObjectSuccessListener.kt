@@ -3,10 +3,11 @@ package com.stevenpopovich.talktothat.cameraengine.objecttracker
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.mlkit.vision.objects.DetectedObject
 import com.otaliastudios.cameraview.CameraView
+import com.stevenpopovich.talktothat.MainDependencyModule
 import com.stevenpopovich.talktothat.cameraengine.RectangleDrawable
 
 class DetectedObjectSuccessListener(
-    private val cameraView: CameraView,
+    private val cameraView: CameraView = MainDependencyModule.camera,
 ) : OnSuccessListener<MutableList<DetectedObject>> {
     override fun onSuccess(objects: MutableList<DetectedObject>?) {
         cameraView.overlay.clear()

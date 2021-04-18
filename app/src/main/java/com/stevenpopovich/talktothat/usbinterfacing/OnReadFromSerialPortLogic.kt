@@ -1,18 +1,18 @@
 package com.stevenpopovich.talktothat.usbinterfacing
 
 import android.widget.TextView
-import com.stevenpopovich.talktothat.MainFragment
+import com.stevenpopovich.talktothat.MainDependencyModule
 
 class OnReadFromSerialPortLogic(
-    private val debugTextView: TextView,
-    private val mainFragment: MainFragment,
+    private val debugTextView: TextView = MainDependencyModule.debugText,
+    private val runOnUIThread: (action: Runnable) -> Unit = MainDependencyModule.runOnUIThread,
 ) {
     private var currentBytesToPrint: ByteArray = ByteArray(0)
 
     val logic = {
         val stringToOutput = currentBytesToPrint.toString(Charsets.UTF_8)
         if (stringToOutput.isNotBlank()) {
-            mainFragment.activity?.runOnUiThread {
+            runOnUIThread {
                 debugTextView.text = stringToOutput
             }
         }

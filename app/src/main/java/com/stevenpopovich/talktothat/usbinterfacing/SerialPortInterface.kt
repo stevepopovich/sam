@@ -2,10 +2,11 @@ package com.stevenpopovich.talktothat.usbinterfacing
 
 import com.felhr.usbserial.UsbSerialDevice
 import com.felhr.usbserial.UsbSerialInterface
+import com.stevenpopovich.talktothat.MainDependencyModule
 
 class SerialPortInterface(
-    serialPortReader: SerialPortReader,
-    private val serialDevice: UsbSerialDevice
+    private val serialDevice: UsbSerialDevice,
+    serialPortReader: SerialPortReader = MainDependencyModule.serialPortReader,
 ) {
     init {
         serialDevice.open()

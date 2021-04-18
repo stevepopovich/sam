@@ -15,7 +15,7 @@ class SerialPortInterfaceTest {
         val usbSerialDevice: UsbSerialDevice = relaxedMock()
         val serialPortReader: SerialPortReader = relaxedMock()
 
-        SerialPortInterface(serialPortReader, usbSerialDevice)
+        SerialPortInterface(usbSerialDevice, serialPortReader)
 
         verifySequence {
             usbSerialDevice.open()
@@ -36,7 +36,7 @@ class SerialPortInterfaceTest {
         val serialPortReader: SerialPortReader = relaxedMock()
         val stringToWrite = "thing"
 
-        val serialPortInterface = SerialPortInterface(serialPortReader, usbSerialDevice)
+        val serialPortInterface = SerialPortInterface(usbSerialDevice, serialPortReader)
 
         serialPortInterface.writeToSerialPort(stringToWrite)
 

@@ -1,24 +1,25 @@
 package com.stevenpopovich.talktothat.usbinterfacing
 
-import android.widget.TextView
-import com.stevenpopovich.talktothat.MainFragment
+import com.stevenpopovich.talktothat.MainDependencyModule
 import com.stevenpopovich.talktothat.testutils.relaxedMock
+import io.mockk.mockk
 import io.mockk.spyk
 import io.mockk.verify
+import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.subjects.BehaviorSubject
 import org.junit.Test
 
 class SerialPortReaderTest {
-    private val debugTextView: TextView = relaxedMock()
-    private val mainFragment: MainFragment = relaxedMock()
     private val behaviorSubject: BehaviorSubject<ByteArray> = spyk(BehaviorSubject.create())
+    private val compositeDisposable: CompositeDisposable = mockk(relaxed = true)
+    private val onReadFromSerialPortLogic: OnReadFromSerialPortLogic = mockk(relaxed = true)
 
     @Test
     fun `test on read data`() {
         val serialPortReader = SerialPortReader(
-            debugTextView,
-            mainFragment,
-            behaviorSubject = behaviorSubject
+            behaviorSubject = behaviorSubject,
+            onReadFromSerialPortLogic,
+            compositeDisposable
         )
 
         val byteArray = ByteArray(0)
@@ -30,9 +31,7 @@ class SerialPortReaderTest {
 
     @Test
     fun `optional parameter`() {
-        SerialPortReader(
-            debugTextView,
-            mainFragment
-        )
+        MainDependencyModule.onReadFromSerialPortLogic = relaxedMock()
+        SerialPortReader()
     }
 }
