@@ -16,7 +16,7 @@ class SerialPortReader(
         behaviorSubject
             .doOnNext { onReadFromSerialPortLogic.bufferBytesToPrint(it) }
             .debounce(300, TimeUnit.MILLISECONDS)
-            .subscribe { onReadFromSerialPortLogic.logic() }
+            .subscribe { onReadFromSerialPortLogic.logic }
             .addTo(compositeDisposable)
     }
 
