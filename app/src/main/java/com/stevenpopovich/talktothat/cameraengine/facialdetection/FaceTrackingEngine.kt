@@ -7,7 +7,7 @@ import com.otaliastudios.cameraview.frame.FrameProcessor
 import com.stevenpopovich.talktothat.MainDependencyModule
 import com.stevenpopovich.talktothat.cameraengine.buildImageFromFrame
 
-class FaceDetectionEngine(
+class FaceTrackingEngine(
     private val faceDetectionSuccessListener: FaceDetectionSuccessListener = MainDependencyModule.faceDetectionSuccessListener,
     private val faceDetector: FaceDetector = getDetector(FaceDetectorOptions.Builder())
 ) : FrameProcessor {

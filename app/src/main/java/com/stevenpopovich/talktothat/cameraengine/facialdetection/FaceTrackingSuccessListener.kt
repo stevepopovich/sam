@@ -18,7 +18,7 @@ val HORIZONTAL_CONTROLLER_DIRECTION = ControllerDirection.REVERSE
 class FaceDetectionSuccessListener(
     private val cameraView: CameraView = MainDependencyModule.camera,
     private val arduinoInterface: ArduinoInterface = MainDependencyModule.arduinoInterface,
-    private val serialPortInterface: SerialPortInterface = MainDependencyModule.serialPortInterface,
+    private val serialPortInterface: SerialPortInterface? = MainDependencyModule.serialPortInterface,
     private val horizontalProcess: Process = FaceTrackingProcess(0.0, 0.0, 0.0),
     private val horizontalPid: PID = PID(
         horizontalProcess,
@@ -37,8 +37,8 @@ class FaceDetectionSuccessListener(
     override fun onSuccess(faces: MutableList<Face>?) {
         if (faces?.isNullOrEmpty() != false) {
             cameraView.overlay.clear()
-            serialPortInterface?.let { serialPortInterface ->
-                arduinoInterface.writeStringToSerialPort(serialPortInterface, 0.toString())
+            serialPortInterface?.let {
+                arduinoInterface.writeStringToSerialPort(serialPortInterface, "90") // slow turn to find face
             }
         } else {
             faces?.firstOrNull()?.let { face ->
