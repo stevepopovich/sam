@@ -7,8 +7,8 @@ import com.stevenpopovich.talktothat.MainDependencyModule
 fun getSerialPortInterface(
     usbManager: UsbManager = MainDependencyModule.usbManager,
     arduinoInterface: ArduinoInterface = MainDependencyModule.arduinoInterface
-): SerialPortInterface {
-    arduinoInterface.getDevice(usbManager)!!.let {
+): SerialPortInterface? {
+    return arduinoInterface.getDevice(usbManager)?.let {
         val usbDeviceConnection = usbManager.openDevice(it)
         val serialDevice = UsbSerialDevice.createUsbSerialDevice(it, usbDeviceConnection)
         return SerialPortInterface(serialDevice)
