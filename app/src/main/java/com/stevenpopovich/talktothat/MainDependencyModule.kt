@@ -7,13 +7,12 @@ import com.google.mlkit.vision.objects.ObjectDetector
 import com.google.mlkit.vision.objects.defaults.ObjectDetectorOptions
 import com.otaliastudios.cameraview.CameraView
 import com.stevenpopovich.talktothat.cameraengine.CameraEngine
-import com.stevenpopovich.talktothat.cameraengine.facialdetection.FaceDetectionEngine
 import com.stevenpopovich.talktothat.cameraengine.facialdetection.FaceDetectionSuccessListener
+import com.stevenpopovich.talktothat.cameraengine.facialdetection.FaceTrackingEngine
 import com.stevenpopovich.talktothat.cameraengine.objecttracker.DetectedObjectSuccessListener
 import com.stevenpopovich.talktothat.cameraengine.objecttracker.ObjectTracker
 import com.stevenpopovich.talktothat.cameraengine.objecttracker.getDetector
 import com.stevenpopovich.talktothat.speechrecognition.ContinuousSpeechRecognizer
-import com.stevenpopovich.talktothat.speechrecognition.SpeechRecognizerRestartLogic
 import com.stevenpopovich.talktothat.speechrecognition.SpeechResultBusinessLogic
 import com.stevenpopovich.talktothat.speechrecognition.SpeechResultsBusinessLogicEngine
 import com.stevenpopovich.talktothat.taskmanager.TaskManager
@@ -44,7 +43,7 @@ class MainDependencyModule {
             serialPortReader = SerialPortReader()
             serialPortInterface = getSerialPortInterface()
             faceDetectionSuccessListener = FaceDetectionSuccessListener()
-            faceDetectionEngine = FaceDetectionEngine()
+            faceTrackingEngine = FaceTrackingEngine()
             cameraEngine = CameraEngine()
 
             continuousSpeechRecognizer = ContinuousSpeechRecognizer()
@@ -57,15 +56,14 @@ class MainDependencyModule {
         lateinit var objectDetector: ObjectDetector
 
         lateinit var faceDetectionSuccessListener: FaceDetectionSuccessListener
-        lateinit var faceDetectionEngine: FaceDetectionEngine
+        lateinit var faceTrackingEngine: FaceTrackingEngine
         lateinit var cameraEngine: CameraEngine
 
         lateinit var continuousSpeechRecognizer: ContinuousSpeechRecognizer
         lateinit var speechResultsBusinessLogicEngine: SpeechResultsBusinessLogicEngine
         lateinit var speechResultsBusinessLogic: SpeechResultBusinessLogic
-        lateinit var speechRecognizerRestartLogic: SpeechRecognizerRestartLogic
 
-        lateinit var serialPortInterface: SerialPortInterface
+        var serialPortInterface: SerialPortInterface? = null
         lateinit var serialPortReader: SerialPortReader
         lateinit var onReadFromSerialPortLogic: OnReadFromSerialPortLogic
         lateinit var arduinoInterface: ArduinoInterface
