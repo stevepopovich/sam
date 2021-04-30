@@ -33,9 +33,8 @@ void setup() {
 
 void loop() {
     recvWithEndMarker();
-//    processData();
+    processData();
     readDistance();
-    goForward();
 }
 
 void recvWithEndMarker() {
