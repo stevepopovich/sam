@@ -14,13 +14,13 @@ import io.mockk.mockkStatic
 import io.mockk.verifySequence
 import org.junit.Test
 
-class FaceDetectionEngineTest {
+class FaceTrackingEngineTest {
     private val faceDetector: FaceDetector = relaxedMock()
     private val faceDetectionSuccessListener: FaceDetectionSuccessListener = relaxedMock()
 
     private val frame: Frame = relaxedMock()
 
-    private val faceDetectionEngine: FaceDetectionEngine = FaceDetectionEngine(faceDetectionSuccessListener, faceDetector)
+    private val faceTrackingEngine: FaceTrackingEngine = FaceTrackingEngine(faceDetectionSuccessListener, faceDetector)
 
     @Test
     fun `face detection engine can process a frame`() {
@@ -40,7 +40,7 @@ class FaceDetectionEngineTest {
             )
         } returns inputImage
 
-        faceDetectionEngine.process(frame)
+        faceTrackingEngine.process(frame)
 
         verifySequence {
             frame.getData<ByteArray>()
@@ -65,6 +65,6 @@ class FaceDetectionEngineTest {
         mockkStatic(FaceDetection::class)
         every { getDetector(FaceDetectorOptions.Builder()) } returns relaxedMock()
         MainDependencyModule.faceDetectionSuccessListener = faceDetectionSuccessListener
-        FaceDetectionEngine()
+        FaceTrackingEngine()
     }
 }

@@ -9,6 +9,7 @@ const byte numChars = 64;
 char receivedChars[numChars];
 
 boolean newData = false;
+boolean crawlingForward = false;
 
 int currStep = 0;
 
@@ -33,9 +34,9 @@ void setup() {
 
 void loop() {
     recvWithEndMarker();
-//    processData();
+    processData();
     readDistance();
-    goForward();
+    crawlForward();
 }
 
 void recvWithEndMarker() {
@@ -64,7 +65,8 @@ void recvWithEndMarker() {
 void processData() {
     if (newData == true) {
         if (strcmp(receivedChars, "forward") == 0) {
-          goForward();
+          //goForward();
+          crawlingForward = true;
         }
         else if (strcmp(receivedChars, "backward") == 0) {
           goBackward();
@@ -76,6 +78,7 @@ void processData() {
           spinClockwise(255);
         }
         else if (strcmp(receivedChars, "stop") == 0) {
+          crawlingForward = false;
           stopMoving();
         } else { // expecting a number -255 to 255
           spinByNumber(atoi(receivedChars));
@@ -99,10 +102,22 @@ void readDistance() {
   distance = duration * 0.034 / 2; // Speed of sound wave divided by 2 (back and forth)
 }
 
+void crawlForward() {
+    if (crawlingForward == true && distance > 15) {
+      motor1->setSpeed(110);
+      motor2->setSpeed(110);
+        
+      motor1->run(FORWARD);
+      motor2->run(FORWARD);
+     } else {
+      stopMoving();  
+     }
+}
+
 void goForward() { 
-    if (distance > 15) {
-      motor1->setSpeed(70);
-      motor2->setSpeed(70);
+    if (distance > 12) {
+      motor1->setSpeed(90);
+      motor2->setSpeed(90);
       
       motor1->run(FORWARD);
       motor2->run(FORWARD);

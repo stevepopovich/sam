@@ -1,12 +1,17 @@
 package com.stevenpopovich.talktothat.taskmanager
 
-import java.util.concurrent.SynchronousQueue
-
 class TaskManager {
+    private var currentTask: Task? = null
 
-    private val taskQueue = SynchronousQueue<Task>()
+    fun stop() {
+        currentTask?.finish()
+        currentTask = null
+    }
 
     fun runTask(task: Task) {
-        taskQueue.add(task)
+        if (currentTask == null) {
+            currentTask = task
+            currentTask?.start()
+        }
     }
 }
