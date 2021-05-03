@@ -8,6 +8,8 @@ import com.stevenpopovich.talktothat.MainDependencyModule
 import com.stevenpopovich.talktothat.cameraengine.RectangleDrawable
 import com.stevenpopovich.talktothat.usbinterfacing.ArduinoInterface
 import com.stevenpopovich.talktothat.usbinterfacing.SerialPortInterface
+import com.stevenpopovich.talktothat.verboseLog
+import io.reactivex.rxjava3.subjects.BehaviorSubject
 import kotlin.math.absoluteValue
 
 const val HORIZONTAL_KP = 0.170 // this makes it more aggressive on change
@@ -34,14 +36,22 @@ class FaceDetectionSuccessListener(
         horizontalProcess.setpoint = cameraView.width.toDouble() / 2.0
     }
 
+    companion object {
+        val stopOverride: BehaviorSubject<Boolean> = BehaviorSubject.createDefault(false)
+    }
+
+    private val String.stopCheck: String
+        get() = if (stopOverride.value == true) "stop" else this
+
     override fun onSuccess(faces: MutableList<Face>?) {
         if (faces?.isNullOrEmpty() != false) {
             cameraView.overlay.clear()
             serialPortInterface?.let {
-                arduinoInterface.writeStringToSerialPort(serialPortInterface, "90") // slow turn to find face
+                arduinoInterface.writeStringToSerialPort(serialPortInterface, "90".stopCheck) // slow turn to find face
             }
         } else {
-            faces?.firstOrNull()?.let { face ->
+            "Stop override value: ${stopOverride.value}".verboseLog()
+            faces.firstOrNull()?.let { face ->
                 horizontalProcess.input = face.boundingBox.centerX().toDouble()
                 horizontalPid.compute()
 
@@ -50,12 +60,12 @@ class FaceDetectionSuccessListener(
                     serialPortInterface?.let { serialPortInterface ->
                         arduinoInterface.writeStringToSerialPort(
                             serialPortInterface,
-                            horizontalProcess.output.toString()
+                            horizontalProcess.output.toString().stopCheck
                         )
                     }
                 } else {
                     serialPortInterface?.let { serialPortInterface ->
-                        arduinoInterface.writeStringToSerialPort(serialPortInterface, 0.toString())
+                        arduinoInterface.writeStringToSerialPort(serialPortInterface, "stop")
                     }
                 }
             }
