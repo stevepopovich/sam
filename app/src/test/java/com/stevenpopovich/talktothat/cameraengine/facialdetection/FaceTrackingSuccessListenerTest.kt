@@ -47,6 +47,8 @@ class FaceTrackingSuccessListenerTest {
 
         listener = FaceDetectionSuccessListener(
             cameraView,
+            horizontalProcess = horizontalProcess,
+            horizontalPid = horizontalPid
         )
 
         every { cameraView.overlay } returns overlay
@@ -69,9 +71,10 @@ class FaceTrackingSuccessListenerTest {
 
         verifySequence {
             cameraView.width
+            horizontalProcess.setpoint = 0.0
             cameraView.overlay
             overlay.clear()
-            serialPortInterface?.let { serialPortInterface ->
+            serialPortInterface.let { serialPortInterface ->
                 arduinoInterface.writeStringToSerialPort(serialPortInterface, 90.toString())
             }
         }
@@ -161,7 +164,7 @@ class FaceTrackingSuccessListenerTest {
         verify {
             arduinoInterface.writeStringToSerialPort(
                 serialPortInterface,
-                "0"
+                "stop"
             )
         }
 
@@ -189,7 +192,7 @@ class FaceTrackingSuccessListenerTest {
         verify {
             arduinoInterface.writeStringToSerialPort(
                 serialPortInterface,
-                "0"
+                "stop"
             )
         }
 
