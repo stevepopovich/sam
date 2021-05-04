@@ -46,7 +46,7 @@ class FaceDetectionSuccessListener(
         if (faces?.isNullOrEmpty() != false) {
             cameraView.overlay.clear()
             serialPortInterface?.let {
-                arduinoInterface.writeStringToSerialPort(serialPortInterface, "90".stopCheck) // slow turn to find face
+                arduinoInterface.writeStringToSerialPort(it, "90".stopCheck) // slow turn to find face
             }
         } else {
             faces.firstOrNull()?.let { face ->

@@ -10,13 +10,13 @@ class ComeHereTask(
 ) : Task {
     override fun start() {
         serialPortInterface?.let {
-            arduinoInterface.writeStringToSerialPort(serialPortInterface, "forward")
+            arduinoInterface.writeStringToSerialPort(it, "forward")
         }
     }
 
     override fun finish() {
         serialPortInterface?.let {
-            arduinoInterface.writeStringToSerialPort(serialPortInterface, "stop")
+            arduinoInterface.writeStringToSerialPort(it, "stop")
         }
     }
 }
