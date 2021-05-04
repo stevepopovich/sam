@@ -19,7 +19,7 @@ class CameraEngineTest {
 
         verifyOrder {
             camera.facing = Facing.BACK
-            camera.previewFrameRate = 60.0f
+            camera.previewFrameRate = 30.0f
             camera.previewFrameRateExact = true
             camera.engine = Engine.CAMERA2
             camera.clearFrameProcessors()
