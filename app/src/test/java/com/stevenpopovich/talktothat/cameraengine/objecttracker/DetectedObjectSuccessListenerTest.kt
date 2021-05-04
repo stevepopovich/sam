@@ -3,6 +3,7 @@ package com.stevenpopovich.talktothat.cameraengine.objecttracker
 import android.view.ViewGroupOverlay
 import com.google.mlkit.vision.objects.DetectedObject
 import com.otaliastudios.cameraview.CameraView
+import com.stevenpopovich.talktothat.MainDependencyModule
 import com.stevenpopovich.talktothat.testutils.relaxedMock
 import io.mockk.confirmVerified
 import io.mockk.every
@@ -39,5 +40,12 @@ class DetectedObjectSuccessListenerTest {
         }
 
         confirmVerified(cameraView, object1, object2)
+    }
+
+    @Test
+    fun `test optional parameters`() {
+        MainDependencyModule.camera = relaxedMock()
+
+        DetectedObjectSuccessListener()
     }
 }

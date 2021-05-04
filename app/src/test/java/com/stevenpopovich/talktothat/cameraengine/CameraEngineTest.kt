@@ -3,6 +3,7 @@ package com.stevenpopovich.talktothat.cameraengine
 import com.otaliastudios.cameraview.CameraView
 import com.otaliastudios.cameraview.controls.Engine
 import com.otaliastudios.cameraview.controls.Facing
+import com.stevenpopovich.talktothat.MainDependencyModule
 import com.stevenpopovich.talktothat.testutils.relaxedMock
 import io.mockk.confirmVerified
 import io.mockk.verifyOrder
@@ -26,5 +27,12 @@ class CameraEngineTest {
         }
 
         confirmVerified(camera)
+    }
+
+    @Test
+    fun `test optional parameters`() {
+        MainDependencyModule.camera = relaxedMock()
+
+        CameraEngine()
     }
 }
