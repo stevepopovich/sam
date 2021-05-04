@@ -35,20 +35,11 @@ class AppEngineTests {
     @Test
     fun `optional parameters`() {
         MainDependencyModule.speechResultsBusinessLogic = relaxedMock()
-
-        val continuousSpeechRecognizer: ContinuousSpeechRecognizer = relaxedMock()
-        val cameraEngine: CameraEngine = relaxedMock()
+        MainDependencyModule.continuousSpeechRecognizer = relaxedMock()
+        MainDependencyModule.cameraEngine = relaxedMock()
 
         val appEngine = AppEngine()
 
-        appEngine.start(
-            continuousSpeechRecognizer,
-            cameraEngine
-        )
-
-        verifyExactlyOne { continuousSpeechRecognizer.startListening(any(), any()) }
-        verifyExactlyOne { cameraEngine.start() }
-
-        confirmVerified(continuousSpeechRecognizer)
+        appEngine.start()
     }
 }
