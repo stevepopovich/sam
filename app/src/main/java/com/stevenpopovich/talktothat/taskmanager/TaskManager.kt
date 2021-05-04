@@ -1,8 +1,8 @@
 package com.stevenpopovich.talktothat.taskmanager
 
-class TaskManager {
+class TaskManager(
     private var currentTask: Task? = null
-
+) {
     fun stop() {
         currentTask?.finish()
         currentTask = null

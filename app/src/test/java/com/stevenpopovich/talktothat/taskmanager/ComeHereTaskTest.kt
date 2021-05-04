@@ -3,6 +3,7 @@ package com.stevenpopovich.talktothat.taskmanager
 import com.stevenpopovich.talktothat.testutils.relaxedMock
 import com.stevenpopovich.talktothat.usbinterfacing.ArduinoInterface
 import com.stevenpopovich.talktothat.usbinterfacing.SerialPortInterface
+import io.mockk.confirmVerified
 import io.mockk.verify
 import org.junit.Test
 
@@ -17,6 +18,8 @@ class ComeHereTaskTest {
         comeHereTask.start()
 
         verify { arduinoInterface.writeStringToSerialPort(serialPortInterface, "forward") }
+
+        confirmVerified(arduinoInterface, serialPortInterface)
     }
 
     @Test
@@ -24,5 +27,7 @@ class ComeHereTaskTest {
         comeHereTask.finish()
 
         verify { arduinoInterface.writeStringToSerialPort(serialPortInterface, "stop") }
+
+        confirmVerified(arduinoInterface, serialPortInterface)
     }
 }
