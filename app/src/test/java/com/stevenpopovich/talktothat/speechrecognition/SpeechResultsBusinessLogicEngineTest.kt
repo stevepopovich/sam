@@ -4,9 +4,9 @@ import android.os.Bundle
 import android.speech.SpeechRecognizer
 import android.widget.TextView
 import com.stevenpopovich.talktothat.MainDependencyModule
+import com.stevenpopovich.talktothat.taskmanager.ComeHereTask
 import com.stevenpopovich.talktothat.taskmanager.TaskManager
 import com.stevenpopovich.talktothat.testutils.relaxedMock
-import com.stevenpopovich.talktothat.usbinterfacing.SerialPortInterface
 import io.mockk.confirmVerified
 import io.mockk.every
 import io.mockk.verify
@@ -14,27 +14,43 @@ import org.junit.Test
 
 class SpeechResultsBusinessLogicEngineTest {
     private val mainText: TextView = relaxedMock()
-    private val serialPortInterface: SerialPortInterface = relaxedMock()
     private val taskManager: TaskManager = relaxedMock()
+    private val comeHereTask: ComeHereTask = relaxedMock()
 
     private val speechResultsBusinessLogicEngine = SpeechResultsBusinessLogicEngine(
         mainText,
         taskManager,
-        serialPortInterface
+        comeHereTask
     )
 
     @Test
-    fun `test passing forward, backward, left, right, stop passes those strings to the arduino`() {
+    fun `test saying stop calls stop on the task manager`() {
         val bundle: Bundle = relaxedMock()
-        val stringArrayList: ArrayList<String> = arrayListOf("forward, backward, left, right, stop")
+        val stopString = arrayListOf("stop")
 
-        every { bundle.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION) } returns stringArrayList
+        every { bundle.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION) } returns stopString
 
         speechResultsBusinessLogicEngine.onSpeechResults(bundle)
 
-        verify { mainText.text = stringArrayList.toString() }
+        verify { mainText.text = stopString.toString() }
+        verify { taskManager.stop() }
 
-        confirmVerified(mainText, serialPortInterface)
+        confirmVerified(mainText, taskManager)
+    }
+
+    @Test
+    fun `test saying hey sam come here creates a come here task`() {
+        val bundle: Bundle = relaxedMock()
+        val comeHereString = arrayListOf("hey Sam come here")
+
+        every { bundle.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION) } returns comeHereString
+
+        speechResultsBusinessLogicEngine.onSpeechResults(bundle)
+
+        verify { mainText.text = comeHereString.toString() }
+        verify { taskManager.runTask(comeHereTask) }
+
+        confirmVerified(mainText, taskManager)
     }
 
     @Test
@@ -43,6 +59,7 @@ class SpeechResultsBusinessLogicEngineTest {
 
         MainDependencyModule.mainText = relaxedMock()
         MainDependencyModule.serialPortInterface = relaxedMock()
+        MainDependencyModule.arduinoInterface = relaxedMock()
         val engine = SpeechResultsBusinessLogicEngine()
 
         engine.onSpeechResults(bundle)

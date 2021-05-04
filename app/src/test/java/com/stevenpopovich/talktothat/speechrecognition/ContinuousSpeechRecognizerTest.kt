@@ -3,6 +3,7 @@ package com.stevenpopovich.talktothat.speechrecognition
 import android.content.Intent
 import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
+import com.stevenpopovich.talktothat.MainDependencyModule
 import com.stevenpopovich.talktothat.testutils.relaxedMock
 import com.stevenpopovich.talktothat.testutils.verifyExactlyOne
 import io.mockk.confirmVerified
@@ -26,5 +27,12 @@ class ContinuousSpeechRecognizerTest {
         verifyExactlyOne { speechRecognizer.startListening(intent) }
 
         confirmVerified(speechRecognizer, recognitionListener, intent)
+    }
+
+    @Test
+    fun `test optional parameters`() {
+        MainDependencyModule.speechRecognizer = relaxedMock()
+
+        ContinuousSpeechRecognizer()
     }
 }

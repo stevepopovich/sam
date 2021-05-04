@@ -8,7 +8,6 @@ import com.stevenpopovich.talktothat.MainDependencyModule
 import com.stevenpopovich.talktothat.cameraengine.RectangleDrawable
 import com.stevenpopovich.talktothat.usbinterfacing.ArduinoInterface
 import com.stevenpopovich.talktothat.usbinterfacing.SerialPortInterface
-import com.stevenpopovich.talktothat.verboseLog
 import io.reactivex.rxjava3.subjects.BehaviorSubject
 import kotlin.math.absoluteValue
 
@@ -47,10 +46,9 @@ class FaceDetectionSuccessListener(
         if (faces?.isNullOrEmpty() != false) {
             cameraView.overlay.clear()
             serialPortInterface?.let {
-                arduinoInterface.writeStringToSerialPort(serialPortInterface, "90".stopCheck) // slow turn to find face
+                arduinoInterface.writeStringToSerialPort(it, "90".stopCheck) // slow turn to find face
             }
         } else {
-            "Stop override value: ${stopOverride.value}".verboseLog()
             faces.firstOrNull()?.let { face ->
                 horizontalProcess.input = face.boundingBox.centerX().toDouble()
                 horizontalPid.compute()

@@ -16,7 +16,7 @@ import io.mockk.verifySequence
 import org.junit.Before
 import org.junit.Test
 
-class FaceDetectionSuccessListenerTest {
+class FaceTrackingSuccessListenerTest {
     private lateinit var cameraView: CameraView
     private lateinit var arduinoInterface: ArduinoInterface
     private lateinit var serialPortInterface: SerialPortInterface
@@ -47,6 +47,8 @@ class FaceDetectionSuccessListenerTest {
 
         listener = FaceDetectionSuccessListener(
             cameraView,
+            horizontalProcess = horizontalProcess,
+            horizontalPid = horizontalPid
         )
 
         every { cameraView.overlay } returns overlay
@@ -63,18 +65,17 @@ class FaceDetectionSuccessListenerTest {
     }
 
     @Test
-    fun `test that if we have no detected faces, we stop moving`() {
+    fun `test that if we have no detected faces, we turn at 90 to look for a face`() {
         horizontalPid = relaxedMock()
         listener.onSuccess(null)
 
         verifySequence {
-            horizontalPid.setOutputLimits(-150.0, 150.0)
-            horizontalProcess.setpoint = cameraView.width.toDouble() / 2.0
-
+            cameraView.width
+            horizontalProcess.setpoint = 0.0
             cameraView.overlay
             overlay.clear()
-            serialPortInterface?.let { serialPortInterface ->
-                arduinoInterface.writeStringToSerialPort(serialPortInterface, 0.toString())
+            serialPortInterface.let { serialPortInterface ->
+                arduinoInterface.writeStringToSerialPort(serialPortInterface, 90.toString())
             }
         }
 
@@ -163,7 +164,7 @@ class FaceDetectionSuccessListenerTest {
         verify {
             arduinoInterface.writeStringToSerialPort(
                 serialPortInterface,
-                "0"
+                "stop"
             )
         }
 
@@ -191,7 +192,7 @@ class FaceDetectionSuccessListenerTest {
         verify {
             arduinoInterface.writeStringToSerialPort(
                 serialPortInterface,
-                "0"
+                "stop"
             )
         }
 

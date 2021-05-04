@@ -10,6 +10,7 @@ import com.stevenpopovich.talktothat.taskmanager.TaskManager
 class SpeechResultsBusinessLogicEngine(
     private val mainText: TextView = MainDependencyModule.mainText,
     private val taskManager: TaskManager = MainDependencyModule.taskManager,
+    private val comeHereTask: ComeHereTask = ComeHereTask()
 ) {
     fun onSpeechResults(results: Bundle?) {
         val speechResults = results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
@@ -20,7 +21,7 @@ class SpeechResultsBusinessLogicEngine(
         }
 
         if (speechResults?.any { it.contains("hey Sam come here") } == true) {
-            taskManager.runTask(ComeHereTask())
+            taskManager.runTask(comeHereTask)
         }
     }
 }
