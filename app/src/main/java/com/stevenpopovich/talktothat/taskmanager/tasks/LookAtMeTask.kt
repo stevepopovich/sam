@@ -4,7 +4,6 @@ import com.otaliastudios.cameraview.CameraView
 import com.stevenpopovich.talktothat.MainDependencyModule
 import com.stevenpopovich.talktothat.cameraengine.facialdetection.FaceDetectionSuccessListener
 import com.stevenpopovich.talktothat.cameraengine.facialdetection.FaceTrackingEngine
-import com.stevenpopovich.talktothat.verboseLog
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.kotlin.addTo
@@ -31,7 +30,6 @@ class LookAtMeTask(
 
     override fun finish() {
         super.finish()
-        "setting stop override to true".verboseLog()
         FaceDetectionSuccessListener.stopOverride.onNext(true)
 
         disposable.clear()
