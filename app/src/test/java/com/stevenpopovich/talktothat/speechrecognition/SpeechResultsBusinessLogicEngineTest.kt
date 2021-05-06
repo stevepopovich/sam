@@ -6,6 +6,8 @@ import android.widget.TextView
 import com.stevenpopovich.talktothat.MainDependencyModule
 import com.stevenpopovich.talktothat.taskmanager.TaskManager
 import com.stevenpopovich.talktothat.taskmanager.tasks.ComeHereTask
+import com.stevenpopovich.talktothat.taskmanager.tasks.DoASpinTask
+import com.stevenpopovich.talktothat.taskmanager.tasks.DontTouchTask
 import com.stevenpopovich.talktothat.testutils.relaxedMock
 import io.mockk.confirmVerified
 import io.mockk.every
@@ -16,11 +18,15 @@ class SpeechResultsBusinessLogicEngineTest {
     private val mainText: TextView = relaxedMock()
     private val taskManager: TaskManager = relaxedMock()
     private val comeHereTask: ComeHereTask = relaxedMock()
+    private val doASpinTask: DoASpinTask = relaxedMock()
+    private val dontTouchTask: DontTouchTask = relaxedMock()
 
     private val speechResultsBusinessLogicEngine = SpeechResultsBusinessLogicEngine(
         mainText,
         taskManager,
-        comeHereTask
+        comeHereTask,
+        doASpinTask,
+        dontTouchTask
     )
 
     @Test
@@ -41,16 +47,46 @@ class SpeechResultsBusinessLogicEngineTest {
     @Test
     fun `test saying hey sam come here creates a come here task`() {
         val bundle: Bundle = relaxedMock()
-        val comeHereString = arrayListOf("hey Sam come here")
+        val stringArray = arrayListOf("hey Sam come here")
 
-        every { bundle.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION) } returns comeHereString
+        every { bundle.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION) } returns stringArray
 
         speechResultsBusinessLogicEngine.onSpeechResults(bundle)
 
-        verify { mainText.text = comeHereString.toString() }
+        verify { mainText.text = stringArray.toString() }
         verify { taskManager.runTask(comeHereTask) }
 
-        confirmVerified(mainText, taskManager)
+        confirmVerified(mainText, taskManager, comeHereTask)
+    }
+
+    @Test
+    fun `test saying do a spin creates a do a spin task`() {
+        val bundle: Bundle = relaxedMock()
+        val stringArray = arrayListOf("do a spin")
+
+        every { bundle.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION) } returns stringArray
+
+        speechResultsBusinessLogicEngine.onSpeechResults(bundle)
+
+        verify { mainText.text = stringArray.toString() }
+        verify { taskManager.runTask(doASpinTask) }
+
+        confirmVerified(mainText, taskManager, doASpinTask)
+    }
+
+    @Test
+    fun `test saying dont touch creates a dont touch task`() {
+        val bundle: Bundle = relaxedMock()
+        val stringArray = arrayListOf("don't touch")
+
+        every { bundle.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION) } returns stringArray
+
+        speechResultsBusinessLogicEngine.onSpeechResults(bundle)
+
+        verify { mainText.text = stringArray.toString() }
+        verify { taskManager.runTask(dontTouchTask) }
+
+        confirmVerified(mainText, taskManager, dontTouchTask)
     }
 
     @Test
