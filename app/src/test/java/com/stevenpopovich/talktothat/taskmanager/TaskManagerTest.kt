@@ -1,5 +1,6 @@
 package com.stevenpopovich.talktothat.taskmanager
 
+import com.stevenpopovich.talktothat.taskmanager.tasks.Task
 import com.stevenpopovich.talktothat.testutils.relaxedMock
 import io.mockk.confirmVerified
 import io.mockk.verify

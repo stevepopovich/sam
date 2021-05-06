@@ -1,5 +1,6 @@
 package com.stevenpopovich.talktothat.taskmanager
 
+import com.stevenpopovich.talktothat.taskmanager.tasks.ComeHereTask
 import com.stevenpopovich.talktothat.testutils.relaxedMock
 import com.stevenpopovich.talktothat.usbinterfacing.ArduinoInterface
 import com.stevenpopovich.talktothat.usbinterfacing.SerialPortInterface

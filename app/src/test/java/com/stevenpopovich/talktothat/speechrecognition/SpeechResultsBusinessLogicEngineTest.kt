@@ -4,8 +4,8 @@ import android.os.Bundle
 import android.speech.SpeechRecognizer
 import android.widget.TextView
 import com.stevenpopovich.talktothat.MainDependencyModule
-import com.stevenpopovich.talktothat.taskmanager.ComeHereTask
 import com.stevenpopovich.talktothat.taskmanager.TaskManager
+import com.stevenpopovich.talktothat.taskmanager.tasks.ComeHereTask
 import com.stevenpopovich.talktothat.testutils.relaxedMock
 import io.mockk.confirmVerified
 import io.mockk.every

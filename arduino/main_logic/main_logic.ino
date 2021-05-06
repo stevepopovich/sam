@@ -109,7 +109,7 @@ void crawlForward() {
         
       motor1->run(FORWARD);
       motor2->run(FORWARD);
-     } else {
+     } else if (crawlingForward == true && distance < 15) {
       stopMoving();  
      }
 }

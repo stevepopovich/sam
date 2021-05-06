@@ -1,4 +1,4 @@
-package com.stevenpopovich.talktothat.taskmanager
+package com.stevenpopovich.talktothat.taskmanager.tasks
 
 import com.otaliastudios.cameraview.CameraView
 import com.stevenpopovich.talktothat.MainDependencyModule
@@ -30,6 +30,7 @@ class LookAtMeTask(
     }
 
     override fun finish() {
+        super.finish()
         "setting stop override to true".verboseLog()
         FaceDetectionSuccessListener.stopOverride.onNext(true)
 
