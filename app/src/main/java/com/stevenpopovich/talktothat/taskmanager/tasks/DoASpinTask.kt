@@ -3,7 +3,6 @@ package com.stevenpopovich.talktothat.taskmanager.tasks
 import com.stevenpopovich.talktothat.MainDependencyModule
 import com.stevenpopovich.talktothat.usbinterfacing.ArduinoInterface
 import com.stevenpopovich.talktothat.usbinterfacing.SerialPortInterface
-import com.stevenpopovich.talktothat.verboseLog
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.kotlin.addTo
@@ -16,13 +15,11 @@ class DoASpinTask(
     private val compositeDisposable = CompositeDisposable()
 
     override fun start() {
-        "-100".verboseLog()
         serialPortInterface?.let {
             arduinoInterface.writeStringToSerialPort(it, "-50")
         }
 
         Single.timer(250, TimeUnit.MILLISECONDS).subscribe { _ ->
-            "-90".verboseLog()
             serialPortInterface?.let {
                 arduinoInterface.writeStringToSerialPort(it, "225")
             }
@@ -33,7 +30,6 @@ class DoASpinTask(
 
     override fun finish() {
         super.finish()
-        "stop".verboseLog()
         serialPortInterface?.let {
             arduinoInterface.writeStringToSerialPort(it, "stop")
         }
