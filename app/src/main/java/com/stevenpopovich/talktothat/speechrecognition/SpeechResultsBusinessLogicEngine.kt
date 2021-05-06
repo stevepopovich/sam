@@ -7,12 +7,14 @@ import com.stevenpopovich.talktothat.MainDependencyModule
 import com.stevenpopovich.talktothat.taskmanager.TaskManager
 import com.stevenpopovich.talktothat.taskmanager.tasks.ComeHereTask
 import com.stevenpopovich.talktothat.taskmanager.tasks.DoASpinTask
+import com.stevenpopovich.talktothat.taskmanager.tasks.DontTouchTask
 
 class SpeechResultsBusinessLogicEngine(
     private val mainText: TextView = MainDependencyModule.mainText,
     private val taskManager: TaskManager = MainDependencyModule.taskManager,
     private val comeHereTask: ComeHereTask = ComeHereTask(),
     private val doASpinTask: DoASpinTask = DoASpinTask(),
+    private val dontTouchTask: DontTouchTask = DontTouchTask(),
 ) {
     fun onSpeechResults(results: Bundle?) {
         val speechResults = results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
@@ -28,6 +30,10 @@ class SpeechResultsBusinessLogicEngine(
 
         if (speechResults?.any { it.contains("do a spin") } == true) {
             taskManager.runTask(doASpinTask)
+        }
+
+        if (speechResults?.any { it.contains("don't touch") } == true) {
+            taskManager.runTask(dontTouchTask)
         }
     }
 }
