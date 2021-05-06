@@ -1,4 +1,4 @@
-package com.stevenpopovich.talktothat.taskmanager
+package com.stevenpopovich.talktothat.taskmanager.tasks
 
 import com.stevenpopovich.talktothat.MainDependencyModule
 import com.stevenpopovich.talktothat.usbinterfacing.ArduinoInterface
@@ -15,6 +15,7 @@ class ComeHereTask(
     }
 
     override fun finish() {
+        super.finish()
         serialPortInterface?.let {
             arduinoInterface.writeStringToSerialPort(it, "stop")
         }

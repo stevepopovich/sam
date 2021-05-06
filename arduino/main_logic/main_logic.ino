@@ -10,6 +10,7 @@ char receivedChars[numChars];
 
 boolean newData = false;
 boolean crawlingForward = false;
+boolean dontTouch = false;
 
 int currStep = 0;
 
@@ -37,6 +38,7 @@ void loop() {
     processData();
     readDistance();
     crawlForward();
+    dontTouchMove();
 }
 
 void recvWithEndMarker() {
@@ -79,7 +81,10 @@ void processData() {
         }
         else if (strcmp(receivedChars, "stop") == 0) {
           crawlingForward = false;
+          dontTouch = false;
           stopMoving();
+        } else if (strcmp(receivedChars, "donttouch") == 0) {
+          dontTouch = true;
         } else { // expecting a number -255 to 255
           spinByNumber(atoi(receivedChars));
         }
@@ -109,8 +114,26 @@ void crawlForward() {
         
       motor1->run(FORWARD);
       motor2->run(FORWARD);
-     } else {
+     } else if (crawlingForward == true && distance < 15) {
       stopMoving();  
+     }
+}
+
+void dontTouchMove() {
+    if (dontTouch == true && distance > 15) {
+      motor1->setSpeed(110);
+      motor2->setSpeed(110);
+        
+      motor1->run(FORWARD);
+      motor2->run(FORWARD);
+     } else if (dontTouch == true && distance < 10) {
+      motor1->setSpeed(110);
+      motor2->setSpeed(110);
+        
+      motor1->run(BACKWARD);
+      motor2->run(BACKWARD);
+     } else if (dontTouch == true) {
+      stopMoving(); 
      }
 }
 

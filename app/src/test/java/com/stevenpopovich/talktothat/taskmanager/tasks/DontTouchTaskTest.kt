@@ -1,6 +1,5 @@
-package com.stevenpopovich.talktothat.taskmanager
+package com.stevenpopovich.talktothat.taskmanager.tasks
 
-import com.stevenpopovich.talktothat.taskmanager.tasks.ComeHereTask
 import com.stevenpopovich.talktothat.testutils.relaxedMock
 import com.stevenpopovich.talktothat.usbinterfacing.ArduinoInterface
 import com.stevenpopovich.talktothat.usbinterfacing.SerialPortInterface
@@ -8,24 +7,23 @@ import io.mockk.confirmVerified
 import io.mockk.verify
 import org.junit.Test
 
-class ComeHereTaskTest {
-
+class DontTouchTaskTest {
     private val arduinoInterface: ArduinoInterface = relaxedMock()
     private val serialPortInterface: SerialPortInterface = relaxedMock()
 
-    private val comeHereTask = ComeHereTask(arduinoInterface, serialPortInterface)
+    private val dontTouchTask = DontTouchTask(arduinoInterface, serialPortInterface)
     @Test
-    fun `start sends forward to the arduino`() {
-        comeHereTask.start()
+    fun `start sends donttouch to the arduino`() {
+        dontTouchTask.start()
 
-        verify { arduinoInterface.writeStringToSerialPort(serialPortInterface, "forward") }
+        verify { arduinoInterface.writeStringToSerialPort(serialPortInterface, "donttouch") }
 
         confirmVerified(arduinoInterface, serialPortInterface)
     }
 
     @Test
     fun `finish sends stop to the arduino`() {
-        comeHereTask.finish()
+        dontTouchTask.finish()
 
         verify { arduinoInterface.writeStringToSerialPort(serialPortInterface, "stop") }
 
