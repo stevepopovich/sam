@@ -60,7 +60,7 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.1.1'
     implementation 'com.github.felHR85:UsbSerial:6.1.0'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.1-native-mt'
-    implementation 'com.google.mlkit:object-detection:16.2.6'
+    implementation 'com.google.mlkit:object-detection:16.2.7'
     implementation 'com.otaliastudios:cameraview:2.7.2'
     implementation "io.reactivex.rxjava3:rxkotlin:3.0.1"
     implementation 'com.google.mlkit:face-detection:16.1.2'
