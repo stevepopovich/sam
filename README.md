@@ -1,5 +1,7 @@
 Welcome to SAM
 
+https://heysam.tech/
+
 SAM is the software behind the friendly Android-Arduino powered home robot.
 
 How to get started with the Android side:
